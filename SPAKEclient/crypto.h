@@ -83,7 +83,7 @@ namespace Crypto
 		unsigned default_keylen = 256;
 	};
 
-	class VKO : public GOST341194, Stribog {
+	class VKO : public PBKDF2 {
 
 	private:
 		ECCurve curve;
@@ -95,21 +95,19 @@ namespace Crypto
 		VKO(){};
 		VKO(const ECCurve &curve);
 		VKO(const ECCurve &c, ECPoint &Px, BigInteger &x, BigInteger &UKM);
-		VKO(const ECPoint &p);
-		VKO(const BigInteger &x, const BigInteger &y);
+
 
 		BigInteger getX();
 		BigInteger getY();
 		BigInteger getK();
+		BigInteger getUKM();
 
 		void SetUKM(BigInteger &UKM);
 		void SetK(BigInteger &K);
 		void SetX(BigInteger &x);
 		void SetY(BigInteger &y);
-		void KEK(ECCurve &curve, BigInteger &x, ECPoint &Py, BigInteger &UKM, BigInteger &K);
+		void KEK(Algorithms algorithm, ECCurve &curve, BigInteger &x, ECPoint &Py, BigInteger &UKM, BigInteger &K);
 
-		bool isPointAtInfinity();
-		bool operator==(ECPoint &p);
 	};
 
 	class SoftSPAKE : public VKO {
@@ -148,19 +146,16 @@ namespace Crypto
 		BigInteger getX();
 		BigInteger getY();
 
-		bool isPointNull();
-		bool isPointAtInfinity();
-		bool operator==(ECPoint &p);
 	};
 
-	class HardSPAKE {
+	class HardSPAKE : public VKO {
 	private:
-		ECPoint Qpw;
 		unsigned IDa, IDb, ind, IDalg;
+		BigInteger salt;
 		string PW;
 		ECSet ecset;
 		vector<unsigned> ctr;
-		BigInteger salt;
+		ECPoint Qpw;
 		BigInteger β;
 		bool zb = false;
 		ECPoint u1, u2, Qb;
@@ -183,8 +178,6 @@ namespace Crypto
 		BigInteger getX();
 		BigInteger getY();
 
-		bool isPointAtInfinity();
-		bool operator==(ECPoint &p);
 	};
 
 };

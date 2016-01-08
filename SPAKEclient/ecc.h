@@ -12,6 +12,7 @@ typedef struct {
 	const char *a;
 	const char *b;
 	const char *n;
+	const char *q;
 	const char *bpx;
 	const char *bpy;
 }ECParams;
@@ -60,6 +61,7 @@ private:
 	BigInteger _a;
 	BigInteger _b;
 	BigInteger _n;
+	BigInteger _q;
 	BigInteger _p;
 	BigInteger _bpx;
 	BigInteger _bpy;
@@ -67,7 +69,7 @@ private:
 public:
 	ECCurve();
 	ECCurve(ECParams &params);
-	ECCurve(BigInteger p, BigInteger n, BigInteger a, BigInteger b, BigInteger bpx, BigInteger bpy);
+	ECCurve(BigInteger p, BigInteger n, BigInteger q, BigInteger a, BigInteger b, BigInteger bpx, BigInteger bpy);
 	ECPoint getBasepoint();
 
 	ECPoint addPoint(ECPoint &p, ECPoint &q);
@@ -82,6 +84,7 @@ public:
 	BigInteger b() { return _b; };
 	BigInteger p() { return _p; };
 	BigInteger n() { return _n; };
+	BigInteger q() { return _q; };
 
 	BigInteger compressPoint(ECPoint &p);
 
