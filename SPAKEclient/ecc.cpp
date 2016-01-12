@@ -28,6 +28,8 @@ ECCurve::ECCurve(BigInteger p, BigInteger n, BigInteger q, BigInteger a, BigInte
 	_bpy = bpy;
 }
 
+
+
 ECPoint ECCurve::addPoint(ECPoint &p, ECPoint &q)
 {
 	BigInteger rx;

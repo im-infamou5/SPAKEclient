@@ -9,37 +9,7 @@ using std::stringstream;
 
 typedef unsigned char B[32];
 typedef unsigned char B32[4];
-//функция чтения из файла
-/*
-bool GOST341194::read_file(char *fileName)
-{
-	ifstream in(fileName, ios::binary);
 
-	if (in.fail())
-		return false;
-
-	in.seekg(0, ios::end);
-	length = (unsigned int)in.tellg();
-	in.seekg(0, ios::beg);
-
-	buffer = new byte[length];
-
-	in.read((char*)buffer, length);
-	in.close();
-
-	return true;
-}
-//Вывод хэша на экран
-bool GOST341194::Show_hash()
-{
-
-	for (int i = 0; i < 32; i++)
-		cout << hex << (unsigned int)res[i];
-
-	cout << endl;
-	return true;
-}
-*/
 
 //Вычисление phi для преобразования P
 int GOST341194::fi(int argument)
@@ -331,7 +301,7 @@ void GOST341194::hash(string message, unsigned long long length, string &out)
 	memcpy(H, newH, sizeof newH);
 
 	f(H, Sum, newH);
-	int f = sizeof newH;
+
 	memcpy(to, newH, sizeof newH);
 	for (int i = 0; i < 32; i++)
 	{

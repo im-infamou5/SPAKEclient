@@ -53,6 +53,8 @@ public:
 	BigInteger getY();
 	BigInteger getZ();
 	bool isPointAtInfinity();
+
+	
 };
 
 class ECCurve {
@@ -72,6 +74,9 @@ public:
 	ECCurve(BigInteger p, BigInteger n, BigInteger q, BigInteger a, BigInteger b, BigInteger bpx, BigInteger bpy);
 	ECPoint getBasepoint();
 
+	//ECCurve& operator=(ECCurve& curve);
+
+
 	ECPoint addPoint(ECPoint &p, ECPoint &q);
 	ECPoint doublePoint(ECPoint &p);
 	ECPoint multiplyPoint(BigInteger &k, ECPoint &p);
@@ -85,6 +90,8 @@ public:
 	BigInteger p() { return _p; };
 	BigInteger n() { return _n; };
 	BigInteger q() { return _q; };
+	BigInteger bpx() { return _bpx; };
+	BigInteger bpy() { return _bpy; };
 
 	BigInteger compressPoint(ECPoint &p);
 

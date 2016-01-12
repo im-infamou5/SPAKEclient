@@ -1,3 +1,4 @@
+#include <Windows.h>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,15 +30,17 @@ static char *pcsc_stringify_error(LONG rv)
 	return -1; \
 		}
 
-using Crypto::VKO;
-using Crypto::Stribog;
-using Crypto::SoftSPAKE;
-using Crypto::HardSPAKE;
-using Crypto::HMAC;
+using namespace Crypto;
+
+
 
 int main()
 {
-	/*примеры вызова hmac и hash
+	SetConsoleCP(1251);// установка кодовой страницы win-cp 1251 в поток ввода
+	SetConsoleOutputCP(1251); // установка кодовой страницы win-cp 1251 в поток вывода
+	VKO_local();
+
+	//примеры вызова hmac и hash
 	string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
 	string foo = "Suppose the original message has length = 50 bytes";
 	HMAC hmac;
@@ -45,16 +48,16 @@ int main()
 	std::cout << out << std::endl;
 	VKO vko;
 	vko.hash(foo, foo.length(), out); 
-	std::cout << out << std::endl;*/
-	char str[128] = "323130393837363534333231303938373635343332313039383736353433323130393837363534333231303938373635343332313039383736353433323130";
+	std::cout << out << std::endl;
+	system("PAUSE");
+	/*char str[128] = "323130393837363534333231303938373635343332313039383736353433323130393837363534333231303938373635343332313039383736353433323130";
 	unsigned char* out;
 	Stribog stribog;
 	out = (unsigned char *)malloc(65);
 	stribog.hash256(str, 64, out);
 	string st(reinterpret_cast<char*>(out));
 	std::cout << st << std::endl;
-	free(out);
-	system("PAUSE");
+	free(out);*/
 	//сюда код общения pcsc с jcardsim
 	/*{
 	LONG rv;
