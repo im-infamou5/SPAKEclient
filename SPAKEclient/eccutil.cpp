@@ -105,7 +105,7 @@ bool ECPoint::operator==(ECPoint &p)
 void generateRPoints(ECCurve curve, ECPoint q, BigInteger *aAra, BigInteger *bAra, BigInteger *xAra, BigInteger *yAra, int n)
 {
 	ECPoint g = curve.getBasepoint();
-	BigInteger order = curve.n();
+	BigInteger order = curve.q();
 	BigInteger modulus = curve.p();
 
 	// Generate random Ri = aiG + biQ

@@ -27,8 +27,12 @@ enum Algorithms {
 	algo341112 = 0x2,
 };
 
+
 namespace Crypto
 {
+	string reorder(string original);
+	void VKO_local();
+
 	class GOST341194 {
 	public:
 		GOST341194::GOST341194(){};
@@ -47,8 +51,8 @@ namespace Crypto
 	class Stribog {
 	public:
 		Stribog::Stribog(){};
-		void hash512(char *message, unsigned long long length, unsigned char *hash);
-		void hash256(char *message, unsigned long long length, unsigned char *hash);
+		void Stribog::hash512(string msg, unsigned long long length, string &res);
+		void Stribog::hash256(string msg, unsigned long long length, string &res);
 	private:
 		void Stribog::AddModulo512(const unsigned char *a, const unsigned char *b, unsigned char *c);
 		void Stribog::F(unsigned char *state);
@@ -63,7 +67,7 @@ namespace Crypto
 		bool Stribog::selftest();
 	};
 
-	class HMAC : public GOST341194, Stribog {
+	class HMAC : public GOST341194, public Stribog {
 	public:
 		HMAC::HMAC(){};
 		void HMAC::Compute(Algorithms algorithm, string secret, string text, size_t length, string &mac);
@@ -76,36 +80,37 @@ namespace Crypto
 	class PBKDF2 : public HMAC {
 	public:
 		PBKDF2::PBKDF2(){};
-		void PBKDF2::Compute(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, unsigned iteration_count = 2000);
+		void PBKDF2::Compute(Algorithms algorithm, string PW, unsigned iteration_count, BigInteger salt, unsigned keylen, string &key);
+
 	};
 
-	class VKO : public GOST341194, Stribog {
+	class VKO : public PBKDF2 {
 
 	private:
 		ECCurve curve;
 		ECPoint Px;
 		ECPoint Py;
-		BigInteger x, y, UKM, K;
+		BigInteger x, UKM;
 
 	public:
-		VKO(){};
-		VKO(const ECCurve &curve);
-		VKO(const ECCurve &c, ECPoint &Px, BigInteger &x, BigInteger &UKM);
-		VKO(const ECPoint &p);
-		VKO(const BigInteger &x, const BigInteger &y);
+		string K;
+		VKO() {};
+		VKO(ECCurve curve, ECPoint Px, BigInteger x, BigInteger UKM);
 
-		BigInteger getX();
-		BigInteger getY();
-		BigInteger getK();
+		ECCurve getCurve(){ return curve; };
+		BigInteger getX(){ return x; };
+		ECPoint getPx() { return Px; };
+		ECPoint getPy() { return Py; };
+		BigInteger getUKM() { return UKM; };
 
-		void SetUKM(BigInteger &UKM);
-		void SetK(BigInteger &K);
-		void SetX(BigInteger &x);
-		void SetY(BigInteger &y);
-		void KEK(ECCurve &curve, BigInteger &x, ECPoint &Py, BigInteger &UKM, BigInteger &K);
 
-		bool isPointAtInfinity();
-		bool operator==(ECPoint &p);
+		void setX(BigInteger &x) { this->x = x; };
+		void setPx(ECPoint &Px){ this->Px = Px; };
+		void setPy(ECPoint &Py){ this->Py = Py; };
+		void setUKM(BigInteger &UKM){ this->UKM = UKM; };
+		void computePx();
+		void KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, BigInteger UKM, string &KEK);
+
 	};
 
 	class SoftSPAKE : public VKO {
@@ -144,19 +149,16 @@ namespace Crypto
 		BigInteger getX();
 		BigInteger getY();
 
-		bool isPointNull();
-		bool isPointAtInfinity();
-		bool operator==(ECPoint &p);
 	};
 
-	class HardSPAKE {
+	class HardSPAKE : public VKO {
 	private:
-		ECPoint Qpw;
 		unsigned IDa, IDb, ind, IDalg;
+		BigInteger salt;
 		string PW;
 		ECSet ecset;
 		vector<unsigned> ctr;
-		BigInteger salt;
+		ECPoint Qpw;
 		BigInteger β;
 		bool zb = false;
 		ECPoint u1, u2, Qb;
@@ -179,8 +181,6 @@ namespace Crypto
 		BigInteger getX();
 		BigInteger getY();
 
-		bool isPointAtInfinity();
-		bool operator==(ECPoint &p);
 	};
 
 };

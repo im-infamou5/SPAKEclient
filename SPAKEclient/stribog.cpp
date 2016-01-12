@@ -21,18 +21,6 @@ using Crypto::Stribog;
 
 #include "stribog_data.h"
 
-void hexPrinter(unsigned char* c, int l)
-{
-
-	while (l > 0)
-	{
-		printf("%02x", *c);
-		l--;
-		c++;
-	}
-	printf("\n");
-}
-
 
 void Stribog::AddModulo512(const unsigned char *a, const unsigned char *b, unsigned char *c)
 {
@@ -206,7 +194,7 @@ void Stribog::hash_X(unsigned char *IV, char *message, unsigned long long length
 
 }
 
-void Stribog::hash512(char *message, unsigned long long length, unsigned char *out)
+void Stribog::hash512(string msg, unsigned long long length, string &res)
 {
 	unsigned char IV[64] =
 	{
@@ -216,11 +204,38 @@ void Stribog::hash512(char *message, unsigned long long length, unsigned char *o
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	};
 
-	hash_X(IV, message, length, out);
-	hexPrinter(out, 64);
+	stringstream ss;
+	unsigned char* to;
+	unsigned char* tmp;
+	char *message;
+	unsigned char *out;
+
+
+	to = (unsigned char *)malloc(length + 1);
+	tmp = (unsigned char *)malloc(length + 1);
+	message = (char *)malloc(length + 1);
+	message = (char *)msg.c_str();
+	out = (unsigned char *)malloc(64);
+
+
+	hash_X(IV, message, length * 8, out);
+	
+
+	memcpy(to, out, sizeof out);
+	for (int i = 0; i < 64; i++)
+	{
+		sprintf((char *)tmp, "%02X", to[i]);
+		ss << (unsigned char *)tmp;
+	}
+
+	free(to);
+	free(tmp);
+	free(message);
+	free(out);
+	ss >> res;
 }
 
-void Stribog::hash256(char *message, unsigned long long length, unsigned char *out)
+void Stribog::hash256(string msg, unsigned long long length, string &res)
 {
 	unsigned char IV[64] =
 	{
@@ -231,145 +246,34 @@ void Stribog::hash256(char *message, unsigned long long length, unsigned char *o
 	};
 	unsigned char hash[64];
 
-	hash_X(IV, message, length, hash);
+	stringstream ss;
+	unsigned char* to;
+	unsigned char* tmp;
+	char *message;
+	unsigned char *out;
+
+
+	to = (unsigned char *)malloc(length + 1);
+	tmp = (unsigned char *)malloc(length + 1);
+	message = (char *)malloc(length + 1);
+	message = (char *)msg.c_str();
+	out = (unsigned char *)malloc(32);
+
+	hash_X(IV, message, length * 8, hash);
 
 	memcpy(out, hash, 32);
-	hexPrinter(out, 32);
-}
-/*
-bool Stribog::selftest()
-{
-	string val1 = "210987654321098765432109876543210987654321098765432109876543210";
-	string val1_512hash = "486f64c1917879417fef082b3381a4e211c324f074654c38823a7b76 \
-		f830ad00fa1fbae42b1285c0352f227524bc9ab16254288dd6863dccd5b9f54a1ad0541b";
-	string val1_256hash = "00557be5e584fd52a449b16b0251d05d27f94ab76cbaa6da890b59d8ef1e159d";
-	string val2 = "ыверогИ ыкълп яырбарх ан ималертс яром с ътюев, ицунв ижобиртС, иртев еС";
-	string val2_512hash = "28fbc9bada033b1460642bdcddb90c3fb3e56c497ccd0f62b8a2ad493 \
-		5e85f037613966de4ee00531ae60f3b5a47f8dae06915d5f2f194996fcabf2622e6881e";
-	string val2_256hash = "508f7e553c06501d749a66fc28c6cac0b005746d97537fa85d9e40904efed29d";
-	string out;
-	
-	hash256(val1, val1.length(), out);
-	if (!out.compare(val1_256hash))
+
+	memcpy(to, out, sizeof out);
+	for (int i = 0; i < 32; i++)
 	{
-		return false;
+		sprintf((char *)tmp, "%02X", to[i]);
+		ss << (unsigned char *)tmp;
 	}
 
-	hash256(val2, val1.length(), out);
-	if(!out.compare(val2_256hash))
-	{
-		return false;
-	}
-	
-	return true;
+	free(to);
+	free(tmp);
+	free(message);
+	free(out);
+	ss >> res;
 
 }
-*/
-/*
-void Stribog::hash512(string message, unsigned long long length, string &out)
-{
-	const unsigned char* msg;
-	unsigned char* res;
-	unsigned char IV[64] =
-	{
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	};
-
-	msg = (const unsigned char*)malloc(length + 1);
-	res = (unsigned char*)malloc(length + 1);
-	hash_X(IV, msg, length, res); // длина передается в битах
-
-	string str((reinterpret_cast<const char*>(msg)));
-	out = str;
-	
-	free(reinterpret_cast<void*>(const_cast<unsigned char *>(msg)));
-	free(reinterpret_cast<void*>(const_cast<unsigned char *>(res)));
-}
-void Stribog::hash256(string message, unsigned long long length, string &out)
-{
-	const unsigned char* msg;
-	unsigned char* res;
-	unsigned char IV[64] =
-	{
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	};
-
-	msg = (const unsigned char*)malloc(length + 1);
-	res = (unsigned char*)malloc(length + 1);
-	for (int i = 0; i < length + 1; i++)
-	{
-		memcpy_s((void *)msg, length, message.c_str(), length);
-	}
-	
-	hash_X(IV, msg, length+1, res); // длина передается в битах
-
-	string str((reinterpret_cast<const char*>(msg)));
-	out = str;
-
-	free(reinterpret_cast<void*>(const_cast<unsigned char *>(msg)));
-	free(reinterpret_cast<void*>(const_cast<unsigned char *>(res)));
-}
-*/
-/*
-void Stribog::hash_pass_256(const unsigned char *message, unsigned long long length, unsigned iteration_count, unsigned char *salt, unsigned char *out)
-{
-	unsigned char IV[64] =
-	{
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	};
-	stringstream salted_pass;
-	char *str;
-	std::string s;
-	int i = 0, len = 0;
-	salted_pass << message;
-	salted_pass << salt;
-
-	s = salted_pass.str();
-	len = s.length();
-	str = new char[64];
-	strcpy_s(str, len, s.c_str());
-	for (int i = 0; i < iteration_count; i++)
-	{
-		hash_X(IV, (unsigned char *)str, length * 8, out); // длина передается в битах
-		*str = *out;
-	}
-	delete [] str;
-}
-
-void Stribog::hash_pass_512(const unsigned char *message, unsigned long long length, unsigned iteration_count, unsigned char *salt, unsigned char *out)
-{
-	unsigned char IV[64] =
-	{
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	};
-	stringstream salted_pass;
-	char *str;
-	std::string s;
-	int i = 0, len = 0;
-	salted_pass << message;
-	salted_pass << salt;
-
-	s = salted_pass.str();
-	len = s.length();
-	str = new char [64];
-	strcpy_s(str, len, s.c_str());
-	for (int i = 0; i < iteration_count; i++)
-	{
-		hash_X(IV, (unsigned char *)str, length*8, out); // длина передается в битах
-		*str = *out;
-	}
-	delete [] str;
-}
-*/

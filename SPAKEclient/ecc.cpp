@@ -10,21 +10,25 @@ ECCurve::ECCurve(ECParams &params)
 {
 	_p = BigInteger(params.p, 16);
 	_n = BigInteger(params.n, 16);
+	_q = BigInteger(params.q, 16);
 	_a = BigInteger(params.a, 16);
 	_b = BigInteger(params.b, 16);
 	_bpx = BigInteger(params.bpx, 16);
 	_bpy = BigInteger(params.bpy, 16);
 }
 
-ECCurve::ECCurve(BigInteger p, BigInteger n, BigInteger a, BigInteger b, BigInteger bpx, BigInteger bpy)
+ECCurve::ECCurve(BigInteger p, BigInteger n, BigInteger q, BigInteger a, BigInteger b, BigInteger bpx, BigInteger bpy)
 {
 	_p = p;
 	_n = n;
+	_q = q;
 	_a = a;
 	_b = b;
 	_bpx = bpx;
 	_bpy = bpy;
 }
+
+
 
 ECPoint ECCurve::addPoint(ECPoint &p, ECPoint &q)
 {
@@ -99,7 +103,7 @@ ECPoint ECCurve::multiplyPoint(BigInteger &k, ECPoint &p)
 	BigInteger m = k;
 	ECPointJacobian q = toJacobian(p);
 
-	m = m % _n;
+	m = m % _q;
 
 	ECPointJacobian r;
 
