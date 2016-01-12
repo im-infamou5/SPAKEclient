@@ -46,12 +46,12 @@ int main()
 	VKO vko;
 	vko.hash(foo, foo.length(), out); 
 	std::cout << out << std::endl;*/
-	char str[128] = "323130393837363534333231303938373635343332313039383736353433323130393837363534333231303938373635343332313039383736353433323130";
+	char str[64] = "210987654321098765432109876543210987654321098765432109876543210";
 	unsigned char* out;
 	Stribog stribog;
 	out = (unsigned char *)malloc(65);
-	stribog.hash256(str, 64, out);
-	string st(reinterpret_cast<char*>(out));
+	stribog.hash256(str, 504, out);
+	string st((char*)out);
 	std::cout << st << std::endl;
 	free(out);
 	system("PAUSE");

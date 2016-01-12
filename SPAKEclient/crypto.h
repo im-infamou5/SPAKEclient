@@ -76,11 +76,7 @@ namespace Crypto
 	class PBKDF2 : public HMAC {
 	public:
 		PBKDF2::PBKDF2(){};
-		void PBKDF2::Compute(Algorithms algorithm, string PW, unsigned iteration_count, BigInteger salt, unsigned keylen, string &key);
-
-	private:
-		unsigned default_iteration_count = 2000;
-		unsigned default_keylen = 256;
+		void PBKDF2::Compute(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, unsigned iteration_count = 2000);
 	};
 
 	class VKO : public GOST341194, Stribog {
