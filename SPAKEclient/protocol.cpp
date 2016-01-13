@@ -1,6 +1,9 @@
 #include <random>
 #include <string>
 #include "crypto.h"
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
 using namespace Crypto;
 
@@ -53,6 +56,8 @@ void VKO::computePx()
 	this->Px = this->curve.multiplyPoint(this->x, this->Px);
 
 }
+
+
 void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, BigInteger UKM, string &KEK)
 {
 	BigInteger src;
@@ -62,14 +67,31 @@ void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, Big
 
 	src = h*UKM*x;
 	res = curve.multiplyPoint(src, Py);
-	K = reorder(reorder(res.getX().toString()) + reorder(res.getY().toString()));
+	K = reorder(res.getX().toString()) + reorder(res.getY().toString());
+
+	std::cout << "K:" + K + "\n";
+	char *message;
+	unsigned char *out;
+	
+	message = (char *)malloc(K.length() + 1);
+	message = (char *)K.c_str();
+	out = (unsigned char *)malloc(65);
+
+
 
 	switch (algorithm)
 	{
 		case 1: this->hash(K, K.length(), KEK); break;
-		case 2: this->hash512(K, K.length(), KEK); break; 
+		case 2: this->hash512(message, K.length()*8, out); break; 
 	}
-	
+
+
+
+	string st((char*)out);
+
+	free(out);
+
+	KEK = st;
 
 
 }
