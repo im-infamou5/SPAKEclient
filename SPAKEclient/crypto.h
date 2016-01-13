@@ -16,6 +16,7 @@
 
 using std::map;
 using std::vector;
+using std::string;
 
 typedef struct {
 	unsigned N;
@@ -51,8 +52,10 @@ namespace Crypto
 	class Stribog {
 	public:
 		Stribog::Stribog(){};
-		void Stribog::hash512(string msg, unsigned long long length, string &res);
-		void Stribog::hash256(string msg, unsigned long long length, string &res);
+		//void Stribog::hash512(string msg, unsigned long long length, string &res);
+		//void Stribog::hash256(string msg, unsigned long long length, string &res);
+		void Stribog::hash512(char *message, unsigned long long length, unsigned char *out);
+		void Stribog::hash256(char *message, unsigned long long length, unsigned char *out);
 	private:
 		void Stribog::AddModulo512(const unsigned char *a, const unsigned char *b, unsigned char *c);
 		void Stribog::F(unsigned char *state);
@@ -80,9 +83,9 @@ namespace Crypto
 	class PBKDF2 : public HMAC {
 	public:
 		PBKDF2::PBKDF2(){};
-		void PBKDF2::Compute(Algorithms algorithm, string PW, unsigned iteration_count, BigInteger salt, unsigned keylen, string &key);
-
+		void PBKDF2::Compute(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, unsigned iteration_count = 2000);
 	};
+
 
 	class VKO : public PBKDF2 {
 

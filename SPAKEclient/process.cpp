@@ -1,4 +1,4 @@
-#include <Windows.h>
+п»ї#include <Windows.h>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,12 +36,12 @@ using namespace Crypto;
 
 int main()
 {
-	SetConsoleCP(1251);// установка кодовой страницы win-cp 1251 в поток ввода
-	SetConsoleOutputCP(1251); // установка кодовой страницы win-cp 1251 в поток вывода
-	VKO_local();
+	SetConsoleCP(1251);// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†С‹ win-cp 1251 РІ РїРѕС‚РѕРє РІРІРѕРґР°
+	SetConsoleOutputCP(1251); // СѓСЃС‚Р°РЅРѕРІРєР° РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†С‹ win-cp 1251 РІ РїРѕС‚РѕРє РІС‹РІРѕРґР°
+	//VKO_local();
 
-	//примеры вызова hmac и hash
-	string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
+	//РїСЂРёРјРµСЂС‹ РІС‹Р·РѕРІР° hmac Рё hash
+	/*string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
 	string foo = "Suppose the original message has length = 50 bytes";
 	HMAC hmac;
 	hmac.Compute(algo341194, key, pass, key.length(), out);
@@ -49,16 +49,20 @@ int main()
 	VKO vko;
 	vko.hash(foo, foo.length(), out); 
 	std::cout << out << std::endl;
-	system("PAUSE");
-	/*char str[128] = "323130393837363534333231303938373635343332313039383736353433323130393837363534333231303938373635343332313039383736353433323130";
+	system("PAUSE");*/
+	char str2[64] = "210987654321098765432109876543210987654321098765432109876543210";
+	char str[257] = "3f6a4173c881d02fc2fccc5654fde0f853b0b99477857ad017e79ed8f3fab8a297a7c4cc7a1b4515480b218c01ac534a9575e4a98ad0f3d7b10e92eaa1538e3b3eff1cc2004f9c4933b518da9b793008c5bbf7086da25930f7c37059dfdfb78459ed495d5eec5da274a293b989aa39f08e37470f2003fc3ef972e8611b26b55f";
+	char str1[257] = "5fb5261b61e872f93efc03200f47378ef039aa89b993a274a25dec5e5d49ed5984b7dfdf5970c3f73059a26d08f7bbc50830799bda18b533499c4f00c21cff3e3b8e53a1ea920eb1d7f3d08aa9e475954a53ac018c210b4815451b7accc4a797a2b8faf3d89ee717d07a857794b9b053f8e0fd5456ccfcc22fd081c873416a3f";
+	char str3[257] = "?jAsГ€ВЃГђ/Г‚ГјГЊVTГЅГ ГёSВ°В№вЂќwвЂ¦zГђГ§ЕѕГГіГєВёВўвЂ”В§Г„ГЊzEH!Е’В¬SJвЂўuГ¤В©Е ГђГіГ—В±вЂ™ГЄВЎSЕЅ;>ГїГ‚OЕ“I3ВµГљвЂєy0Г…В»Г·mВўY0Г·ГѓpYГџГџВ·вЂћYГ­I]^Г¬]ВўtВўвЂњВ№вЂ°ВЄ9Г°ЕЅ7G Гј>Г№rГЁa&Вµ_";
 	unsigned char* out;
 	Stribog stribog;
 	out = (unsigned char *)malloc(65);
-	stribog.hash256(str, 64, out);
-	string st(reinterpret_cast<char*>(out));
+	stribog.hash512(str3, 2048, out);
+	string st((char*)out);
 	std::cout << st << std::endl;
-	free(out);*/
-	//сюда код общения pcsc с jcardsim
+	free(out);
+	system("PAUSE");
+	//СЃСЋРґР° РєРѕРґ РѕР±С‰РµРЅРёСЏ pcsc СЃ jcardsim
 	/*{
 	LONG rv;
 
