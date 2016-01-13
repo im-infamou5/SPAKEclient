@@ -41,14 +41,14 @@ int main()
 	VKO_local();
 
 	//ןנטלונû גûחמגא hmac ט hash
-	string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
+	/*string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
 	string foo = "Suppose the original message has length = 50 bytes";
 	HMAC hmac;
 	hmac.Compute(algo341194, key, pass, key.length(), out);
 	std::cout << out << std::endl;
 	VKO vko;
 	vko.hash(foo, foo.length(), out); 
-	std::cout << out << std::endl;
+	std::cout << out << std::endl;*/
 	system("PAUSE");
 	/*char str[128] = "323130393837363534333231303938373635343332313039383736353433323130393837363534333231303938373635343332313039383736353433323130";
 	unsigned char* out;

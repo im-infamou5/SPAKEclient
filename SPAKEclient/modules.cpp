@@ -112,11 +112,11 @@ void Crypto::VKO_local()
 
 	//Вычисление общего ключа сторонами
 	A_side.KEK(algorithm, A_side.getCurve(), A_side.getX(), A_side.getPy(), A_side.getUKM(), A_side.K);
-
-	std::cout << "Результирующий ключ стороны A:\n" + reorder(A_side.K) + "\n";
-
 	B_side.KEK(algorithm, B_side.getCurve(), B_side.getX(), B_side.getPy(), B_side.getUKM(), B_side.K);
 
 
+	std::cout << "Результирующий ключ стороны A:\n" + reorder(A_side.K) + "\n";
+
 	std::cout << "Результирующий ключ стороны B:\n" + reorder(B_side.K) + "\n";
+
 }

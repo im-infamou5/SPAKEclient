@@ -1,7 +1,6 @@
 #include <memory>
 #include <sstream>
 #include <string>
-#include <sstream>
 #include "crypto.h"
 
 using Crypto::PBKDF2;
