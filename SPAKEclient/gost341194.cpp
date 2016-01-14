@@ -305,7 +305,7 @@ void GOST341194::hash(string message, unsigned long long length, string &out)
 	memcpy(to, newH, sizeof newH);
 	for (int i = 0; i < 32; i++)
 	{
-		sprintf((char *)tmp, "%02X", to[i]);
+		sprintf((char *)tmp, "%02x", to[i]);
 		ss << (unsigned char *)tmp;
 	}
 	

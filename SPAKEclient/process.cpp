@@ -33,13 +33,12 @@ static char *pcsc_stringify_error(LONG rv)
 using namespace Crypto;
 
 
-
 int main()
 {
 	SetConsoleCP(1251);// установка кодовой страницы win-cp 1251 в поток ввода
 	SetConsoleOutputCP(1251); // установка кодовой страницы win-cp 1251 в поток вывода
-	//VKO_local();
-
+	VKO_local();
+	system("PAUSE");
 	//примеры вызова hmac и hash
 	/*string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
 	string foo = "Suppose the original message has length = 50 bytes";
@@ -50,18 +49,28 @@ int main()
 	vko.hash(foo, foo.length(), out); 
 	std::cout << out << std::endl;
 	system("PAUSE");*/
-	char str2[64] = "210987654321098765432109876543210987654321098765432109876543210";
-	char str[257] = "3f6a4173c881d02fc2fccc5654fde0f853b0b99477857ad017e79ed8f3fab8a297a7c4cc7a1b4515480b218c01ac534a9575e4a98ad0f3d7b10e92eaa1538e3b3eff1cc2004f9c4933b518da9b793008c5bbf7086da25930f7c37059dfdfb78459ed495d5eec5da274a293b989aa39f08e37470f2003fc3ef972e8611b26b55f";
-	char str1[257] = "5fb5261b61e872f93efc03200f47378ef039aa89b993a274a25dec5e5d49ed5984b7dfdf5970c3f73059a26d08f7bbc50830799bda18b533499c4f00c21cff3e3b8e53a1ea920eb1d7f3d08aa9e475954a53ac018c210b4815451b7accc4a797a2b8faf3d89ee717d07a857794b9b053f8e0fd5456ccfcc22fd081c873416a3f";
-	char str3[257] = "?jAsÈÐ/ÂüÌVTýàøS°¹”w…zÐçžØóú¸¢—§ÄÌzEH!Œ¬SJ•uä©ŠÐó×±’ê¡SŽ;>ÿÂOœI3µÚ›y0Å»÷m¢Y0÷ÃpYßß·„YíI]^ì]¢t¢“¹‰ª9ðŽ7G ü>ùrèa&µ_";
+	/*string str4 = "3f6a4173c881d02fc2fccc5654fde0f853b0b99477857ad017e79ed8f3fab8a297a7c4cc7a1b4515480b218c01ac534a9575e4a98ad0f3d7b10e92eaa1538e3b3eff1cc2004f9c4933b518da9b793008c5bbf7086da25930f7c37059dfdfb78459ed495d5eec5da274a293b989aa39f08e37470f2003fc3ef972e8611b26b55f";
+	char* str5;
+	unsigned long long length = str4.length() / 2;
+	str5 = (char*)malloc(length);
+	cvtstr(str4, str5);
 	unsigned char* out;
 	Stribog stribog;
 	out = (unsigned char *)malloc(65);
-	stribog.hash512(str3, 2048, out);
+	stribog.hash512(str5, length*8, out);
 	string st((char*)out);
-	std::cout << st << std::endl;
+	std::cout <<st << std::endl;
+	free(str5);
 	free(out);
-	system("PAUSE");
+	system("PAUSE");*/
+	
+	/*string str = "fbe2e5f0eee3c820fbeafaebef20fffbf0e1e0f0f520e0ed20e8ece0ebe5f0f2f120fff0eeec20f120faf2fee5e2202ce8f6f3ede220e8e6eee1e8f0f2d1202ce8f0f2e5e220e5d1";
+	string out;
+	Stribog stribog;
+	stribog.hash512(str, str.length(), out);
+	std::cout << out << std::endl;
+	system("PAUSE");*/
+
 	//сюда код общения pcsc с jcardsim
 	/*{
 	LONG rv;

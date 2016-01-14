@@ -31,6 +31,7 @@ enum Algorithms {
 
 namespace Crypto
 {
+	void cvtstr(string str, char * out);
 	string reorder(string original);
 	void VKO_local();
 
@@ -52,8 +53,8 @@ namespace Crypto
 	class Stribog {
 	public:
 		Stribog::Stribog(){};
-		//void Stribog::hash512(string msg, unsigned long long length, string &res);
-		//void Stribog::hash256(string msg, unsigned long long length, string &res);
+		void Stribog::hash512(string msg, unsigned long long length, string &res);
+		void Stribog::hash256(string msg, unsigned long long length, string &res);
 		void Stribog::hash512(char *message, unsigned long long length, unsigned char *out);
 		void Stribog::hash256(char *message, unsigned long long length, unsigned char *out);
 	private:

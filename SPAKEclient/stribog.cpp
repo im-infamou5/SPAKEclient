@@ -13,6 +13,8 @@ using std::stringstream;
 using std::string;
 using std::bitset;
 using Crypto::Stribog;
+using Crypto::cvtstr;
+using Crypto::reorder;
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -220,8 +222,6 @@ void Stribog::hash512(char *message, unsigned long long length, unsigned char *o
 
 	hash_X(IV, message, length, out);
 
-
-	hexPrinter(out, 64);
 }
 
 void Stribog::hash256(char *message, unsigned long long length, unsigned char *out)
@@ -238,90 +238,59 @@ void Stribog::hash256(char *message, unsigned long long length, unsigned char *o
 	hash_X(IV, message, length, hash);
 
 	memcpy(out, hash, 32);
-	hexPrinter(out, 32);
+
 }
 
-/*
 void Stribog::hash512(string msg, unsigned long long length, string &res)
 {
-	unsigned char IV[64] =
-	{
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	};
-
+	char* tmp;
+	unsigned char* out;
+	unsigned char* out_tmp;
+	unsigned long long new_length = length / 2;
 	stringstream ss;
-	unsigned char* to;
-	unsigned char* tmp;
-	char *message;
-	unsigned char *out;
+	tmp = (char*)malloc(new_length);
+	out = (unsigned char *)malloc(65);
+	out_tmp = (unsigned char *)malloc(65);
+	cvtstr(msg, tmp);
 
-
-	to = (unsigned char *)malloc(length + 1);
-	tmp = (unsigned char *)malloc(length + 1);
-	message = (char *)malloc(length + 1);
-	message = (char *)msg.c_str();
-	out = (unsigned char *)malloc(64);
-
-
-	hash_X(IV, message, length * 8, out);
+	hash512(tmp, new_length * 8, out);
 	
-
-	memcpy(to, out, sizeof out);
 	for (int i = 0; i < 64; i++)
 	{
-		sprintf((char *)tmp, "%02X", to[i]);
-		ss << (unsigned char *)tmp;
+		sprintf((char *)out_tmp, "%02x", out[i]);
+		ss << (unsigned char *)out_tmp;
 	}
-
-	free(to);
-	free(tmp);
-	free(message);
-	free(out);
+	
 	ss >> res;
+	
+	free(tmp);
+	free(out);
+	free(out_tmp);
 }
 
 void Stribog::hash256(string msg, unsigned long long length, string &res)
 {
-	unsigned char IV[64] =
-	{
-		0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-		0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-		0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-		0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
-	};
-	unsigned char hash[64];
-
+	char* tmp;
+	unsigned char* out;
+	unsigned char* out_tmp;
+	unsigned long long new_length = length / 2;
 	stringstream ss;
-	unsigned char* to;
-	unsigned char* tmp;
-	char *message;
-	unsigned char *out;
+	tmp = (char*)malloc(new_length);
+	out = (unsigned char *)malloc(33);
+	out_tmp = (unsigned char *)malloc(33);
+	cvtstr(msg, tmp);
 
+	hash256(tmp, new_length * 8, out);
 
-	to = (unsigned char *)malloc(length + 1);
-	tmp = (unsigned char *)malloc(length + 1);
-	message = (char *)malloc(length + 1);
-	message = (char *)msg.c_str();
-	out = (unsigned char *)malloc(32);
-
-	hash_X(IV, message, length * 8, hash);
-
-	memcpy(out, hash, 32);
-
-	memcpy(to, out, sizeof out);
 	for (int i = 0; i < 32; i++)
 	{
-		sprintf((char *)tmp, "%02X", to[i]);
-		ss << (unsigned char *)tmp;
+		sprintf((char *)out_tmp, "%02x", out[i]);
+		ss << (unsigned char *)out_tmp;
 	}
 
-	free(to);
-	free(tmp);
-	free(message);
-	free(out);
 	ss >> res;
 
-}*/
+	free(tmp);
+	free(out);
+	free(out_tmp);
+}

@@ -7,6 +7,16 @@
 
 using namespace Crypto;
 
+void Crypto::cvtstr(string str, char * out)
+{
+	for (int i = 0; i < str.length()-1; i += 2)
+	{
+		out[i / 2] = std::stoi(str.substr(i, 2), nullptr, 16);
+	}
+
+}
+
+
 string Crypto::reorder(string original)
 {
 	string temp;
@@ -67,32 +77,13 @@ void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, Big
 
 	src = h*UKM*x;
 	res = curve.multiplyPoint(src, Py);
-	K = reorder(res.getX().toString()) + reorder(res.getY().toString());
-
-	std::cout << "K:" + K + "\n";
-	char *message;
-	unsigned char *out;
-	
-	message = (char *)malloc(K.length() + 1);
-	message = (char *)K.c_str();
-	out = (unsigned char *)malloc(65);
-
-
+	K = reorder(reorder(res.getX().toString()) + reorder(res.getY().toString()));
 
 	switch (algorithm)
 	{
 		case 1: this->hash(K, K.length(), KEK); break;
-		case 2: this->hash512(message, K.length()*8, out); break; 
+		case 2: this->hash512(K, K.length(), KEK); break; 
 	}
-
-
-
-	string st((char*)out);
-
-	free(out);
-
-	KEK = st;
-
 
 }
 

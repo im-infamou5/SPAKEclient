@@ -116,7 +116,5 @@ void Crypto::VKO_local()
 
 
 	std::cout << "Результирующий ключ стороны A:\n" + reorder(A_side.K) + "\n";
-
 	std::cout << "Результирующий ключ стороны B:\n" + reorder(B_side.K) + "\n";
-
 }
