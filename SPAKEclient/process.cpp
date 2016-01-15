@@ -52,7 +52,7 @@ int main()
 	std::cout << foo1 << std::endl;
 	system("PAUSE");*/
 	//HMAC
-	string key = "0001020304";    
+	string key = "0001020304";
 	string text = reorder("0126bdb87800af214341456563780100");
 	string out;
 	HMAC hmac;
