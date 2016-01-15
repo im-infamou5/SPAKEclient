@@ -9,6 +9,12 @@
 #include <map>
 #include <cstring>
 #include <memory>
+#include <openssl/evp.h>
+#include <openssl/aes.h>
+#include <openssl/err.h>
+#include <openssl/hmac.h>
+#include <openssl/sha.h>
+#include <string.h>
 #include "BigInteger.h"
 #include "stribog_data.h"
 #include "gost341194_data.h" 
@@ -78,7 +84,7 @@ namespace Crypto
 
 	private:
 		const size_t blockSize = GOST341194_BLOCKSIZE;
-		string ipad, opad;// text, mac;
+		string ipad, opad;
 	};
 
 	class PBKDF2 : public HMAC {
@@ -108,19 +114,16 @@ namespace Crypto
 		BigInteger getUKM() { return UKM; };
 
 
-		void setX(BigInteger &x) { this->x = x; };
-		void setPx(ECPoint &Px){ this->Px = Px; };
-		void setPy(ECPoint &Py){ this->Py = Py; };
-		void setUKM(BigInteger &UKM){ this->UKM = UKM; };
-		void computePx();
-		void KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, BigInteger UKM, string &KEK);
+		void VKO::setX(BigInteger &x) { this->x = x; };
+		void VKO::setPx(ECPoint &Px){ this->Px = Px; };
+		void VKO::setPy(ECPoint &Py){ this->Py = Py; };
+		void VKO::setUKM(BigInteger &UKM){ this->UKM = UKM; };
+		void VKO::computePx();
+		void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, BigInteger UKM, string &KEK);
 
 	};
 
 	class SoftSPAKE : public VKO {
-		/*friend void
-		hash_512(const unsigned char *message, unsigned long long length, unsigned char *out),
-		hash_256(const unsigned char *message, unsigned long long length, unsigned char *out),*/
 	private:
 		unsigned IDa, IDb, ind, IDalg;
 		string PW;
@@ -134,21 +137,21 @@ namespace Crypto
 		string Ka, MACa;
 		
 
-	public: //TODO - сделать прототипы методов в соответствии с протоколом
-		SoftSPAKE(){};
-		SoftSPAKE(const ECPoint &p);
-		SoftSPAKE(const BigInteger &x, const BigInteger &y);
+	public:
+		SoftSPAKE::SoftSPAKE(){};
+		SoftSPAKE::SoftSPAKE(const ECPoint &p);
+		SoftSPAKE::SoftSPAKE(const BigInteger &x, const BigInteger &y);
 
-		void initializeCTR();
-		void ComputeQapw();
-		void Computeu1();
-		void ComputeQa();
-		void CheckQa();
-		void ComputeKa();
-		void ComputeMACa();
-		void CheckMACb();
-		void startCTR();
-		void endCTR();
+		void SoftSPAKE::initializeCTR();
+		void SoftSPAKE::ComputeQapw();
+		void SoftSPAKE::Computeu1();
+		void SoftSPAKE::ComputeQa();
+		void SoftSPAKE::CheckQa();
+		void SoftSPAKE::ComputeKa();
+		void SoftSPAKE::ComputeMACa();
+		void SoftSPAKE::CheckMACb();
+		void SoftSPAKE::startCTR();
+		void SoftSPAKE::endCTR();
 
 		BigInteger getX();
 		BigInteger getY();
@@ -168,23 +171,52 @@ namespace Crypto
 		ECPoint u1, u2, Qb;
 		string Kb, MACa, MACb;
 
-	public://TODO - сделать прототипы методов в соответствии с протоколом
-		HardSPAKE(){};
-		HardSPAKE(const ECPoint &p);
-		HardSPAKE(const BigInteger &x, const BigInteger &y);
+	public:
+		HardSPAKE::HardSPAKE(){};
+		HardSPAKE::HardSPAKE(const ECPoint &p);
+		HardSPAKE::HardSPAKE(const BigInteger &x, const BigInteger &y);
 
-		void initializeCTR();
-		void ComputeQpw();
-		void ComputeQb();
-		void CheckQb();
-		void ComputeKb();
-		void Computeu2();
-		void CheckMACa();
-		void ComputeMACb();
+		void HardSPAKE::initializeCTR();
+		void HardSPAKE::ComputeQpw();
+		void HardSPAKE::ComputeQb();
+		void HardSPAKE::CheckQb();
+		void HardSPAKE::ComputeKb();
+		void HardSPAKE::Computeu2();
+		void HardSPAKE::CheckMACa();
+		void HardSPAKE::ComputeMACb();
 
 		BigInteger getX();
 		BigInteger getY();
 
+	};
+
+	namespace Emulator
+	{
+		class AES
+		{
+		private:
+			EVP_CIPHER_CTX aes_ctx;
+		public:
+			AES::AES();
+			virtual AES::~AES();
+			void AES::AESInitKey(unsigned char* key, unsigned char* iv, bool is_encrypt);
+			unsigned char* AES::AESEncrypt(unsigned char *src, size_t srclen, size_t *dstlen);
+			unsigned char* AES::AESDecrypt(unsigned char *src, size_t srclen, size_t *dstlen);
+			void AES::Free(void* p);
+		};
+		class SHA256
+		{
+		public:
+			unsigned char* SHA256::hash(unsigned char* buffer, size_t bufSize, size_t& size);
+		};
+		
+		class HMAC 
+		{
+		public:
+			unsigned char* HMAC::Compute(const char* key, const char* message);
+		private:
+			HMAC_CTX* hmac_ctx = HMAC_CTX_new();
+		};
 	};
 
 };
