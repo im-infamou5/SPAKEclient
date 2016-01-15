@@ -7,13 +7,23 @@
 
 using namespace Crypto;
 
-void Crypto::cvtstr(string str, char * out)
+void Crypto::cvtstr(string str, char * out, bool ishex)
 {
-	for (int i = 0; i < str.length()-1; i += 2)
+	if (ishex)
 	{
-		out[i / 2] = std::stoi(str.substr(i, 2), nullptr, 16);
+		for (int i = 0; i < str.length() - 1; i += 2)
+		{
+			out[i / 2] = std::stoi(str.substr(i, 2), nullptr, 16);
+		}
 	}
+	else
+	{
+		for (int i = 0; i < str.length(); i ++)
+		{
+			out[i] = str[i];
+		}
 
+	}
 }
 
 
@@ -81,8 +91,8 @@ void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, Big
 
 	switch (algorithm)
 	{
-		case 1: this->hash(K, K.length(), KEK); break;
-		case 2: this->hash512(K, K.length(), KEK); break; 
+		case 1: this->hash(K, K.length(), KEK, true); break;
+		case 2: this->hash512(K, K.length(), KEK, true); break; 
 	}
 
 }

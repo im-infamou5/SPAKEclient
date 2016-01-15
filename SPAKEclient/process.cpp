@@ -37,18 +37,20 @@ int main()
 {
 	SetConsoleCP(1251);// установка кодовой страницы win-cp 1251 в поток ввода
 	SetConsoleOutputCP(1251); // установка кодовой страницы win-cp 1251 в поток вывода
-	VKO_local();
-	system("PAUSE");
+	//VKO_local();
+	//system("PAUSE");
 	//примеры вызова hmac и hash
-	/*string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
+	string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
 	string foo = "Suppose the original message has length = 50 bytes";
-	HMAC hmac;
-	hmac.Compute(algo341194, key, pass, key.length(), out);
-	std::cout << out << std::endl;
+	string foo1 = "ыверогИ ыкълп яырбарх ан ималертс яром с ътюев ,ицунв ижобиртС ,иртев еС";
+	//HMAC hmac;
+	//hmac.Compute(algo341194, key, pass, key.length(), out);
+	//std::cout << out << std::endl;
 	VKO vko;
-	vko.hash(foo, foo.length(), out); 
+	vko.hash512(foo1, foo1.length(), out);
+	//vko.hash(foo1, foo1.length(), out); 
 	std::cout << out << std::endl;
-	system("PAUSE");*/
+	system("PAUSE");
 	/*string str4 = "3f6a4173c881d02fc2fccc5654fde0f853b0b99477857ad017e79ed8f3fab8a297a7c4cc7a1b4515480b218c01ac534a9575e4a98ad0f3d7b10e92eaa1538e3b3eff1cc2004f9c4933b518da9b793008c5bbf7086da25930f7c37059dfdfb78459ed495d5eec5da274a293b989aa39f08e37470f2003fc3ef972e8611b26b55f";
 	char* str5;
 	unsigned long long length = str4.length() / 2;

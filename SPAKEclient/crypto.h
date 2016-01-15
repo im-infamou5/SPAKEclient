@@ -31,14 +31,14 @@ enum Algorithms {
 
 namespace Crypto
 {
-	void cvtstr(string str, char * out);
+	void cvtstr(string str, char * out, bool ishex = false);
 	string reorder(string original);
 	void VKO_local();
 
 	class GOST341194 {
 	public:
 		GOST341194::GOST341194(){};
-		void GOST341194::hash(string message, unsigned long long length, string &out);
+		void GOST341194::hash(string message, unsigned long long length, string &out, bool ishex = false);
 	private:
 		int GOST341194::fi(int argument);
 		void GOST341194::E_f(unsigned char A[], unsigned char K[], unsigned char R[]);//Функция f в ГОСТ 28147-89
@@ -53,8 +53,8 @@ namespace Crypto
 	class Stribog {
 	public:
 		Stribog::Stribog(){};
-		void Stribog::hash512(string msg, unsigned long long length, string &res);
-		void Stribog::hash256(string msg, unsigned long long length, string &res);
+		void Stribog::hash512(string msg, unsigned long long length, string &res, bool ishex = false);
+		void Stribog::hash256(string msg, unsigned long long length, string &res, bool ishex = false);
 		void Stribog::hash512(char *message, unsigned long long length, unsigned char *out);
 		void Stribog::hash256(char *message, unsigned long long length, unsigned char *out);
 	private:
@@ -78,7 +78,7 @@ namespace Crypto
 
 	private:
 		const size_t blockSize = GOST341194_BLOCKSIZE;
-		string ipad, opad, text, mac;
+		string ipad, opad;// text, mac;
 	};
 
 	class PBKDF2 : public HMAC {

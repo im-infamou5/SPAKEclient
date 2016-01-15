@@ -23,7 +23,7 @@ void HMAC::Compute(Algorithms algorithm, string secret, string text, size_t leng
 	switch (algorithm)
 	{
 		case 1: hmac.hash(step1, step1.length(), step2); break;
-		//case 2: hmac.hash256(step1, step1.length(), step2); break; 
+		case 2: hmac.hash512(step1, step1.length(), step2); break; 
 	}
 	if (algorithm == algo341194)
 	{ 
@@ -46,7 +46,7 @@ void HMAC::Compute(Algorithms algorithm, string secret, string text, size_t leng
 	switch (algorithm)
 	{
 		case 1: hmac.hash(step3, step3.length(), temp); break;
-		//case 2: hmac.hash256(step3, step3.length(), mac); break;
+		case 2: hmac.hash512(step3, step3.length(), mac); break;
 	}
 	if (algorithm == algo341194)
 	{

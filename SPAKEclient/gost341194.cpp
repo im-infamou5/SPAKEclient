@@ -242,17 +242,25 @@ void GOST341194::f(unsigned char H[], unsigned char M[], unsigned char newH[])
 	memcpy(newH, S, sizeof S);
 }
 
-void GOST341194::hash(string message, unsigned long long length, string &out)
+void GOST341194::hash(string message, unsigned long long length, string &out, bool ishex)
 {
 	B block, Sum, L, H, newH;
 	
 	stringstream ss;
 	unsigned char* to;
 	unsigned char* tmp;
+	char* msg;
 	uint8_t a = 0;
+	unsigned long long s_length;
+	if (ishex)
+		s_length = length / 2;
+	else
+		s_length = length;
+	msg = (char*)malloc(s_length);
+	to = (unsigned char *)malloc(33);
+	tmp = (unsigned char *)malloc(3);
 
-	to = (unsigned char *)malloc(length + 1);
-	tmp = (unsigned char *)malloc(length + 1);
+	cvtstr(message, msg, ishex);
 
 	unsigned int pos = 0, posIB = 0;
 
@@ -260,10 +268,10 @@ void GOST341194::hash(string message, unsigned long long length, string &out)
 
 	memset(H, 0, sizeof H);
 
-	while ((posIB < length) || pos)
+	while ((posIB < s_length) || pos)
 	{
-		if (posIB < length)
-			block[pos++] = message[posIB++];
+		if (posIB < s_length)
+			block[pos++] = msg[posIB++];
 		else
 			block[pos++] = 0;
 
@@ -288,7 +296,7 @@ void GOST341194::hash(string message, unsigned long long length, string &out)
 
 	memset(L, 0, sizeof L);
 
-	int c = length << 3;
+	int c = s_length << 3;
 
 	for (int i = 0; i < 32; i++)
 	{
@@ -311,5 +319,6 @@ void GOST341194::hash(string message, unsigned long long length, string &out)
 	
 	free(to);
 	free(tmp);
+	free(msg);
 	ss >> out;
 }

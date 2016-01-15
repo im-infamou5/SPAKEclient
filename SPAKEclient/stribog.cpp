@@ -241,19 +241,23 @@ void Stribog::hash256(char *message, unsigned long long length, unsigned char *o
 
 }
 
-void Stribog::hash512(string msg, unsigned long long length, string &res)
+void Stribog::hash512(string msg, unsigned long long length, string &res, bool ishex)
 {
 	char* tmp;
 	unsigned char* out;
 	unsigned char* out_tmp;
-	unsigned long long new_length = length / 2;
+	unsigned long long s_length;
 	stringstream ss;
-	tmp = (char*)malloc(new_length);
+	if (ishex)
+		s_length = length / 2;
+	else
+		s_length = length;
+	tmp = (char*)malloc(s_length);
 	out = (unsigned char *)malloc(65);
-	out_tmp = (unsigned char *)malloc(65);
-	cvtstr(msg, tmp);
+	out_tmp = (unsigned char *)malloc(3);
+	cvtstr(msg, tmp,ishex);
 
-	hash512(tmp, new_length * 8, out);
+	hash512(tmp, s_length * 8, out);
 	
 	for (int i = 0; i < 64; i++)
 	{
@@ -268,19 +272,23 @@ void Stribog::hash512(string msg, unsigned long long length, string &res)
 	free(out_tmp);
 }
 
-void Stribog::hash256(string msg, unsigned long long length, string &res)
+void Stribog::hash256(string msg, unsigned long long length, string &res, bool ishex)
 {
 	char* tmp;
 	unsigned char* out;
 	unsigned char* out_tmp;
-	unsigned long long new_length = length / 2;
+	unsigned long long s_length;
 	stringstream ss;
-	tmp = (char*)malloc(new_length);
+	if (ishex)
+		s_length = length / 2;
+	else
+		s_length = length;
+	tmp = (char*)malloc(s_length);
 	out = (unsigned char *)malloc(33);
-	out_tmp = (unsigned char *)malloc(33);
-	cvtstr(msg, tmp);
+	out_tmp = (unsigned char *)malloc(3);
+	cvtstr(msg, tmp, ishex);
 
-	hash256(tmp, new_length * 8, out);
+	hash256(tmp, s_length * 8, out);
 
 	for (int i = 0; i < 32; i++)
 	{
