@@ -1,8 +1,6 @@
 ﻿#ifndef _CRYPTO_H
 #define _CRYPTO_H
 
-#define GOST341194_BLOCKSIZE 256
-#define GOST341112_BLOCKSIZE 512
 
 #include <random>
 #include <vector>
@@ -26,6 +24,7 @@ typedef struct {
 enum Algorithms {
 	algo341194 = 0x1,
 	algo341112 = 0x2,
+	algo341112_512 = 0x3
 };
 
 
@@ -74,11 +73,7 @@ namespace Crypto
 	class HMAC : public GOST341194, public Stribog {
 	public:
 		HMAC::HMAC(){};
-		void HMAC::Compute(Algorithms algorithm, string secret, string text, size_t length, string &mac);
-
-	private:
-		const size_t blockSize = GOST341194_BLOCKSIZE;
-		string ipad, opad;// text, mac;
+		void HMAC::Compute(Algorithms algorithm, string text, string key, size_t length, string &mac);
 	};
 
 	class PBKDF2 : public HMAC {

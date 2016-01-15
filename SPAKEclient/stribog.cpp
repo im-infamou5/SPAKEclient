@@ -264,7 +264,7 @@ void Stribog::hash512(string msg, unsigned long long length, string &res, bool i
 		sprintf((char *)out_tmp, "%02x", out[i]);
 		ss << (unsigned char *)out_tmp;
 	}
-	
+	res.clear();
 	ss >> res;
 	
 	free(tmp);
@@ -295,7 +295,7 @@ void Stribog::hash256(string msg, unsigned long long length, string &res, bool i
 		sprintf((char *)out_tmp, "%02x", out[i]);
 		ss << (unsigned char *)out_tmp;
 	}
-
+	res.clear();
 	ss >> res;
 
 	free(tmp);

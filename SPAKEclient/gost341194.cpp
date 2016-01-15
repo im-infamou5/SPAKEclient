@@ -316,7 +316,7 @@ void GOST341194::hash(string message, unsigned long long length, string &out, bo
 		sprintf((char *)tmp, "%02x", to[i]);
 		ss << (unsigned char *)tmp;
 	}
-	
+	out.clear();
 	free(to);
 	free(tmp);
 	free(msg);

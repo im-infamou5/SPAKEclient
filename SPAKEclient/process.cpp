@@ -40,38 +40,31 @@ int main()
 	//VKO_local();
 	//system("PAUSE");
 	//примеры вызова hmac и hash
-	string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
+	/*string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
 	string foo = "Suppose the original message has length = 50 bytes";
 	string foo1 = "ыверогИ ыкълп яырбарх ан ималертс яром с ътюев ,ицунв ижобиртС ,иртев еС";
 	//HMAC hmac;
-	//hmac.Compute(algo341194, key, pass, key.length(), out);
+	//hmac.Compute(algo341194, pass, key, key.length(), out);
 	//std::cout << out << std::endl;
 	VKO vko;
-	vko.hash512(foo1, foo1.length(), out);
+	vko.hash256(foo1, foo1.length(), foo1);
 	//vko.hash(foo1, foo1.length(), out); 
-	std::cout << out << std::endl;
-	system("PAUSE");
-	/*string str4 = "3f6a4173c881d02fc2fccc5654fde0f853b0b99477857ad017e79ed8f3fab8a297a7c4cc7a1b4515480b218c01ac534a9575e4a98ad0f3d7b10e92eaa1538e3b3eff1cc2004f9c4933b518da9b793008c5bbf7086da25930f7c37059dfdfb78459ed495d5eec5da274a293b989aa39f08e37470f2003fc3ef972e8611b26b55f";
-	char* str5;
-	unsigned long long length = str4.length() / 2;
-	str5 = (char*)malloc(length);
-	cvtstr(str4, str5);
-	unsigned char* out;
-	Stribog stribog;
-	out = (unsigned char *)malloc(65);
-	stribog.hash512(str5, length*8, out);
-	string st((char*)out);
-	std::cout <<st << std::endl;
-	free(str5);
-	free(out);
+	std::cout << foo1 << std::endl;
 	system("PAUSE");*/
-	
-	/*string str = "fbe2e5f0eee3c820fbeafaebef20fffbf0e1e0f0f520e0ed20e8ece0ebe5f0f2f120fff0eeec20f120faf2fee5e2202ce8f6f3ede220e8e6eee1e8f0f2d1202ce8f0f2e5e220e5d1";
+	//HMAC
+	string key = "0001020304";
+	string text = reorder("0126bdb87800af214341456563780100");
 	string out;
-	Stribog stribog;
-	stribog.hash512(str, str.length(), out);
+	HMAC hmac;
+	hmac.Compute(algo341112, text, key, key.length(), out);
+	//std::cout << reorder(out) << std::endl;
+	system("PAUSE");
+	/*string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
+	HMAC hmac;
+	hmac.Compute(algo341194, key, pass, key.length(), out);
 	std::cout << out << std::endl;
 	system("PAUSE");*/
+
 
 	//сюда код общения pcsc с jcardsim
 	/*{

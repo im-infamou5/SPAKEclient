@@ -15,6 +15,7 @@ void Crypto::VKO_local()
 	std::cout << "Выберите версию алгоритма:\n";
 	std::cout << "1-VKO_GOSTR3410_2001_256 (Функция хэширования ГОСТ Р 34.11-94)\n";
 	std::cout << "2-VKO_GOSTR3410_2012_256 (Функция хэширования ГОСТ Р 34.11-12 Streebog)\n";
+	std::cout << "3-VKO_GOSTR3410_2012_512 (Функция хэширования ГОСТ Р 34.11-12 Streebog)\n";
 	short choice;
 	Algorithms algorithm;
 	while (1)//Выбор алгоритма
@@ -30,7 +31,7 @@ void Crypto::VKO_local()
 		}
 		else
 		{
-			if ((choice == 1) || (choice == 2))
+			if ((choice == 1) || (choice == 2) || (choice == 3))
 			{
 				break;
 			}
@@ -45,6 +46,7 @@ void Crypto::VKO_local()
 	{
 	case 1: algorithm = algo341194; break;
 	case 2: algorithm = algo341112; break;
+	case 3: algorithm = algo341112_512; break;
 	}
 
 	std::cout << "Используемая кривая: id-tc26-gost-3410-12-512-paramSetA. \n";

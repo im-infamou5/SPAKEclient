@@ -91,8 +91,9 @@ void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, Big
 
 	switch (algorithm)
 	{
-		case 1: this->hash(K, K.length(), KEK, true); break;
-		case 2: this->hash512(K, K.length(), KEK, true); break; 
+		case 1: hash(K, K.length(), KEK, true); break;
+		case 2: hash256(K, K.length(), KEK, true); break; 
+		case 3: hash512(K, K.length(), KEK, true); break;
 	}
 
 }
