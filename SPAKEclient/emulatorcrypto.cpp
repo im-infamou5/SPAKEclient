@@ -1,4 +1,4 @@
-#include <openssl/evp.h>
+/*#include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/err.h>
 #include <openssl/sha.h>
@@ -99,4 +99,4 @@ unsigned char* HMAC::Compute(const char* key, const char* message)
 
 	return result;
 
-}
+}*/

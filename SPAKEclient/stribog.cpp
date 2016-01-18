@@ -252,7 +252,7 @@ void Stribog::hash512(string msg, unsigned long long length, string &res, bool i
 		s_length = length / 2;
 	else
 		s_length = length;
-	tmp = (char*)malloc(s_length);
+	tmp = (char*)malloc(s_length + 1);
 	out = (unsigned char *)malloc(65);
 	out_tmp = (unsigned char *)malloc(3);
 	cvtstr(msg, tmp,ishex);
@@ -283,7 +283,7 @@ void Stribog::hash256(string msg, unsigned long long length, string &res, bool i
 		s_length = length / 2;
 	else
 		s_length = length;
-	tmp = (char*)malloc(s_length);
+	tmp = (char*)malloc(s_length + 1);
 	out = (unsigned char *)malloc(33);
 	out_tmp = (unsigned char *)malloc(3);
 	cvtstr(msg, tmp, ishex);

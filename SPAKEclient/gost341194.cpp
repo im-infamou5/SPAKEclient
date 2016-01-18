@@ -256,7 +256,7 @@ void GOST341194::hash(string message, unsigned long long length, string &out, bo
 		s_length = length / 2;
 	else
 		s_length = length;
-	msg = (char*)malloc(s_length);
+	msg = (char*)malloc(s_length + 1);
 	to = (unsigned char *)malloc(33);
 	tmp = (unsigned char *)malloc(3);
 

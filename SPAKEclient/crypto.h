@@ -1,19 +1,17 @@
 ﻿#ifndef _CRYPTO_H
 #define _CRYPTO_H
 
-#define GOST341194_BLOCKSIZE 256
-#define GOST341112_BLOCKSIZE 512
 
 #include <random>
 #include <vector>
 #include <map>
 #include <cstring>
 #include <memory>
-#include <openssl/evp.h>
+/*#include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/err.h>
 #include <openssl/hmac.h>
-#include <openssl/sha.h>
+#include <openssl/sha.h>*/
 #include <string.h>
 #include "BigInteger.h"
 #include "stribog_data.h"
@@ -32,13 +30,15 @@ typedef struct {
 enum Algorithms {
 	algo341194 = 0x1,
 	algo341112 = 0x2,
+	algo341112_512 = 0x3,
 };
 
 
 namespace Crypto
 {
 	void cvtstr(string str, char * out, bool ishex = false);
-	string reorder(string original);
+	string cvtstr(string str);
+	string reorder(string original, bool ishex = false);
 	void VKO_local();
 
 	class GOST341194 {
@@ -80,17 +80,14 @@ namespace Crypto
 	class HMAC : public GOST341194, public Stribog {
 	public:
 		HMAC::HMAC(){};
-		void HMAC::Compute(Algorithms algorithm, string secret, string text, size_t length, string &mac);
+		void HMAC::Compute_HMAC(Algorithms algorithm, string text, string key, size_t length, string &mac, bool ishex = false);
 
-	private:
-		const size_t blockSize = GOST341194_BLOCKSIZE;
-		string ipad, opad;
 	};
 
 	class PBKDF2 : public HMAC {
 	public:
 		PBKDF2::PBKDF2(){};
-		void PBKDF2::Compute(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, unsigned iteration_count = 2000);
+		void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, unsigned iteration_count = 2000);
 	};
 
 
@@ -190,7 +187,7 @@ namespace Crypto
 
 	};
 
-	namespace Emulator
+/*	namespace Emulator
 	{
 		class AES
 		{
@@ -217,7 +214,7 @@ namespace Crypto
 		private:
 			HMAC_CTX* hmac_ctx = HMAC_CTX_new();
 		};
-	};
+	};*/
 
 };
 

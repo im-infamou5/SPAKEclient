@@ -82,20 +82,20 @@ void Crypto::VKO_local()
 	ECCurve test_curve(test_curve_params);
 
 	//UKM
-	BigInteger ukm_num = BigInteger(reorder("1d80603c8544c727"), 16);
-	std::cout << "UKM:\n" + reorder(ukm_num.toString()) + "\n";
+	BigInteger ukm_num = BigInteger(reorder("1d80603c8544c727", true), 16);
+	std::cout << "UKM:\n" + reorder(ukm_num.toString(), true) + "\n";
 
 	//Закрытый ключ стороны А
 	BigInteger a_key = BigInteger(reorder("c990ecd972fce84ec4db022778f50fcac726f4670"
-		"8384b8d458304962d7147f8c2db41cef22c90b102f2968404f9b9be6d47c79692d81826b32b8daca43cb667"), 16);
-	std::cout << "Закрытый ключ стороны А:\n" + reorder(a_key.toString()) + "\n";
+		"8384b8d458304962d7147f8c2db41cef22c90b102f2968404f9b9be6d47c79692d81826b32b8daca43cb667", true), 16);
+	std::cout << "Закрытый ключ стороны А:\n" + reorder(a_key.toString(), true) + "\n";
 
 
 	//Закрытый ключ стороны В
 	BigInteger b_key = BigInteger(reorder("48c859f7b6f11585887cc05ec6ef1390cfea739b1"
-		"a18c0d4662293ef63b79e3b8014070b44918590b4b996acfea4edfbbbcccc8c06edd8bf5bda92a51392d0db"), 16);
+		"a18c0d4662293ef63b79e3b8014070b44918590b4b996acfea4edfbbbcccc8c06edd8bf5bda92a51392d0db", true), 16);
 
-	std::cout << "Закрытый ключ стороны B:\n" + reorder(b_key.toString()) + "\n";
+	std::cout << "Закрытый ключ стороны B:\n" + reorder(b_key.toString(), true) + "\n";
 
 	VKO A_side(test_curve, test_curve.getBasepoint(), a_key, ukm_num);
 	VKO B_side(test_curve, test_curve.getBasepoint(), b_key, ukm_num);
@@ -105,8 +105,8 @@ void Crypto::VKO_local()
 	B_side.computePx();
 
 
-	std::cout << "Открытый ключ стороны A:\n" + reorder(A_side.getPx().getX().toString()) + reorder(A_side.getPx().getY().toString()) + "\n";
-	std::cout << "Открытый ключ стороны B:\n" + reorder(B_side.getPx().getX().toString()) + reorder(B_side.getPx().getY().toString()) + "\n";
+	std::cout << "Открытый ключ стороны A:\n" + reorder(A_side.getPx().getX().toString(), true) + reorder(A_side.getPx().getY().toString(), true) + "\n";
+	std::cout << "Открытый ключ стороны B:\n" + reorder(B_side.getPx().getX().toString(), true) + reorder(B_side.getPx().getY().toString(), true) + "\n";
 
 	//Обмен открытыми ключами
 	A_side.setPy(B_side.getPx());
@@ -117,6 +117,6 @@ void Crypto::VKO_local()
 	B_side.KEK(algorithm, B_side.getCurve(), B_side.getX(), B_side.getPy(), B_side.getUKM(), B_side.K);
 
 
-	std::cout << "Результирующий ключ стороны A:\n" + reorder(A_side.K) + "\n";
-	std::cout << "Результирующий ключ стороны B:\n" + reorder(B_side.K) + "\n";
+	std::cout << "Результирующий ключ стороны A:\n" + reorder(A_side.K, true) + "\n";
+	std::cout << "Результирующий ключ стороны B:\n" + reorder(B_side.K, true) + "\n";
 }
