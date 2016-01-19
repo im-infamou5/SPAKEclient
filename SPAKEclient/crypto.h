@@ -87,7 +87,7 @@ namespace Crypto
 	class PBKDF2 : public HMAC {
 	public:
 		PBKDF2::PBKDF2(){};
-		void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, unsigned iteration_count = 2000);
+		void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, string &out, unsigned iteration_count = 2000);
 	};
 
 
