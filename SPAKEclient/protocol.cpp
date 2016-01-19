@@ -69,29 +69,6 @@ string Crypto::reorder(string original, bool ishex)
 	return temp;
 }
 
-
-std::random_device rd;
-std::mt19937 eng(rd());
-std::uniform_int_distribution<> lim1(3, 6);
-std::uniform_int_distribution<> lim2(7, 20);
-std::uniform_int_distribution<> lim3(1000, 100000);
-
-
-void SoftSPAKE::initializeCTR()
-{
-	this->ctr[1] = lim1(eng);
-	this->ctr[2] = lim2(eng);
-	this->ctr[3] = lim3(eng);
-}
-
-void HardSPAKE::initializeCTR()
-{
-	this->ctr[1] = lim1(eng);
-	this->ctr[2] = lim2(eng);
-	this->ctr[3] = lim3(eng);
-}
-
-
 VKO::VKO(ECCurve curve, ECPoint Px, BigInteger x, BigInteger UKM)
 {   
 	this->curve = curve;
@@ -104,7 +81,6 @@ void VKO::computePx()
 	this->Px = this->curve.multiplyPoint(this->x, this->Px);
 
 }
-
 
 void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, BigInteger UKM, string &KEK)
 {
@@ -126,3 +102,23 @@ void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, Big
 
 }
 
+
+std::random_device rd;
+std::mt19937 eng(rd());
+std::uniform_int_distribution<> lim1(3, 6);
+std::uniform_int_distribution<> lim2(7, 20);
+std::uniform_int_distribution<> lim3(1000, 100000);
+
+void SoftSPAKE::initializeCTR()
+{
+	this->ctr[1] = lim1(eng);
+	this->ctr[2] = lim2(eng);
+	this->ctr[3] = lim3(eng);
+}
+
+void HardSPAKE::initializeCTR()
+{
+	this->ctr[1] = lim1(eng);
+	this->ctr[2] = lim2(eng);
+	this->ctr[3] = lim3(eng);
+}

@@ -40,6 +40,7 @@ namespace Crypto
 	string cvtstr(string str);
 	string reorder(string original, bool ishex = false);
 	void VKO_local();
+	void SPAKE_local();
 
 	class GOST341194 {
 	public:

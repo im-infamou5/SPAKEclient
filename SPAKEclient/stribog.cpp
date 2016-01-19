@@ -266,6 +266,8 @@ void Stribog::hash512(string msg, unsigned long long length, string &res, bool i
 	}
 	res.clear();
 	ss >> res;
+
+	res = cvtstr(res);
 	
 	free(tmp);
 	free(out);
@@ -297,6 +299,8 @@ void Stribog::hash256(string msg, unsigned long long length, string &res, bool i
 	}
 	res.clear();
 	ss >> res;
+
+	res = cvtstr(res);
 
 	free(tmp);
 	free(out);

@@ -317,8 +317,10 @@ void GOST341194::hash(string message, unsigned long long length, string &out, bo
 		ss << (unsigned char *)tmp;
 	}
 	out.clear();
+	ss >> out;
+	out = cvtstr(out);
+
 	free(to);
 	free(tmp);
 	free(msg);
-	ss >> out;
 }
