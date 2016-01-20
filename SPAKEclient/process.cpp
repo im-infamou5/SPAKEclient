@@ -37,10 +37,10 @@ int main()
 {
 	SetConsoleCP(1251);// установка кодовой страницы win-cp 1251 в поток ввода
 	SetConsoleOutputCP(1251); // установка кодовой страницы win-cp 1251 в поток вывода
-	/*VKO_local();
-	system("PAUSE");*/
+	SPAKE_local();
+	system("PAUSE");
 	//примеры вызова hmac и hash
-	/*string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
+	/*//string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
 	string foo = "Suppose the original message has length = 50 bytes";
 	string foo1 = "ыверогИ ыкълп яырбарх ан ималертс яром с ътюев ,ицунв ижобиртС ,иртев еС";
 	string foo2 = "fbe2e5f0eee3c820fbeafaebef20fffbf0e1e0f0f520e0ed20e8ece0ebe5f0f2f120fff0eeec20f120faf2fee5e2202ce8f6f3ede220e8e6eee1e8f0f2d1202ce8f0f2e5e220e5d1";
@@ -48,18 +48,27 @@ int main()
 	//hmac.Compute_HMAC(algo341194, pass, key, key.length(), out);
 	//std::cout << out << std::endl;
 	VKO vko;
-	vko.hash512(foo1, foo1.length(), foo1);
+	//vko.hash512(foo1, foo1.length(), foo1);
 	//vko.hash(pass, pass.length(), pass); 
-	std::cout << foo1 << std::endl;
+	//std::cout << foo1 << std::endl;
 	system("PAUSE");*/
 	//HMAC
-	string key = reorder("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f", true);
+	/*string key = reorder("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f", true);
 	string text = reorder("0126bdb87800af214341456563780100", true);
 	string out;
 	HMAC hmac;
 	hmac.Compute_HMAC(algo341112_512, text, key, key.length(), out, true);
-	std::cout << out << std::endl;
-	system("PAUSE");
+	std::cout << cvthex(out) << std::endl;
+	system("PAUSE");*/
+	/*//PBKDF2
+	string pass = "qwerty123", salt = "123456";
+	string out;
+	PBKDF2 pb;
+	pb.Compute_PBKDF2(algo341112_512, pass, salt, out);
+	
+	std::cout << cvthex(out) << std::endl;
+	
+	system("PAUSE");*/
 	/*string out, pass = "This is message, length=32 bytes", key = "s=, ehesttgiyga bnss esi2leh3 mT";
 	HMAC hmac;
 	hmac.Compute(algo341194, key, pass, key.length(), out);

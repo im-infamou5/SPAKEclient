@@ -1,21 +1,15 @@
-#include <memory>
 #include <sstream>
 #include <string>
 #include <sstream>
-#include <bitset>
 #include "crypto.h"
 
 using namespace Crypto;
 using std::stringstream;
-using std::bitset;
 
-void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, string &out, unsigned iteration_count)
+void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, string &out, unsigned iteration_count)
 {
-	bitset<256> bits256;
-	bitset<512> bits512;
-	string mac[1];
+	string mac0, mac1, mac2;
 	stringstream stream;
-	HMAC hmac;
 
 	stream << salt << 1;
 	salt = stream.str();
@@ -23,33 +17,27 @@ void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, unsign
 	for (int i = 0; i < iteration_count; i++)
 	{
 		if (!i)
-			hmac.Compute_HMAC((Algorithms)algorithm, PW, salt, PW.length(), mac[0]);
-		if (keylen == 512)
 		{
-			bits512 = (bitset<512>)mac[0];
+			Compute_HMAC((Algorithms)algorithm, PW, salt, salt.length(), mac0);
+			out = mac0;
 		}
-		else bits256 = (bitset<256>)mac[0];
-
 		if (i)
 		{
-			hmac.Compute_HMAC((Algorithms)algorithm, PW, mac[0], PW.length(), mac[1]);
-			if (keylen == 512)
+			Compute_HMAC((Algorithms)algorithm, PW, mac0, mac0.length(), mac1);
+			for (size_t i = 0uL; i < mac0.length(); ++i)
 			{
-				bits512 ^= (bitset<512>)mac[1];
+				mac0[i] ^= mac1[i];
 			}
-			else
-			{
-				bits256 ^= (bitset<256>)mac[1];
-			}
-			mac[0] = mac[1];
-			mac[1].assign("");
+			mac2 = mac0;
+			mac0 = mac1;
+			mac1.assign("");
 		}
 	}
-	stream.clear();
-	switch (algorithm)
-	{
-		case 1: stream << std::hex << bits256; break;
-		case 2: stream << std::hex << bits512; break;
-	}
+	stream.str(std::string());
+
+	stream << std::hex << mac2; 
+
 	out = stream.str();
+
+
 }

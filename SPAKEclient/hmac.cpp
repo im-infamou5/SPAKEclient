@@ -33,7 +33,7 @@ void HMAC::Compute_HMAC(Algorithms algorithm, string text, string key, size_t le
 		switch (algorithm)
 		{
 		case 1: hash(key, key.length(), key); break;
-		case 2: hash256(key, key.length(), key); break;
+		case 2: hash512(key, key.length(), key); break;
 		case 3: hash512(key, key.length(), key); break;
 		}
 	}

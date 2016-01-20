@@ -74,8 +74,6 @@ public:
 	ECCurve(BigInteger p, BigInteger n, BigInteger q, BigInteger a, BigInteger b, BigInteger bpx, BigInteger bpy);
 	ECPoint getBasepoint();
 
-	//ECCurve& operator=(ECCurve& curve);
-
 
 	ECPoint addPoint(ECPoint &p, ECPoint &q);
 	ECPoint doublePoint(ECPoint &p);

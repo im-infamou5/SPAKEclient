@@ -1,13 +1,25 @@
-#include <random>
+п»ї#include <random>
 #include <string>
+#include <sstream>
 #include "crypto.h"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
 using namespace Crypto;
-//Принимает строку, возвращает в out масcив чаров из её элементов, если ishex = 0 и массив чаров 
-//из 16ричных значений её элемнтов, взятых по 2, если ishex = 1
+using std::stringstream;
+//Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё РїСЂРѕС‚РѕРєРѕР»РѕРІ*************************************************************************************
+
+
+//РќР° СЃР»СѓС‡Р°Р№, РµСЃР»Рё РЅСѓР¶РЅРѕ Р±СѓРґРµС‚ РіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ С‡РёСЃР»Р°
+/*std::random_device rd;
+std::mt19937 eng(rd());
+std::uniform_int_distribution<> lim1(3, 6);
+std::uniform_int_distribution<> lim2(7, 20);
+std::uniform_int_distribution<> lim3(1000, 100000);*/
+
+//РџСЂРёРЅРёРјР°РµС‚ СЃС‚СЂРѕРєСѓ, РІРѕР·РІСЂР°С‰Р°РµС‚ РІ out РјР°СЃcРёРІ С‡Р°СЂРѕРІ РёР· РµС‘ СЌР»РµРјРµРЅС‚РѕРІ, РµСЃР»Рё ishex = 0 Рё РјР°СЃСЃРёРІ С‡Р°СЂРѕРІ 
+//РёР· 16СЂРёС‡РЅС‹С… Р·РЅР°С‡РµРЅРёР№ РµС‘ СЌР»РµРјРЅС‚РѕРІ, РІР·СЏС‚С‹С… РїРѕ 2, РµСЃР»Рё ishex = 1
 void Crypto::cvtstr(string str, char * out, bool ishex)
 {
 	if (ishex)
@@ -29,7 +41,7 @@ void Crypto::cvtstr(string str, char * out, bool ishex)
 	}
 
 }
-//Перегрузка предыдущей ф-ции, возвращающая string, только для 16ричных входных строчек
+//РџРµСЂРµРіСЂСѓР·РєР° РїСЂРµРґС‹РґСѓС‰РµР№ С„-С†РёРё, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ string, С‚РѕР»СЊРєРѕ РґР»СЏ 16СЂРёС‡РЅС‹С… РІС…РѕРґРЅС‹С… СЃС‚СЂРѕС‡РµРє
 string Crypto::cvtstr(string str)
 {
 	string out;
@@ -41,8 +53,27 @@ string Crypto::cvtstr(string str)
 	}
 	return out;
 }
+//РџСЂРёРЅРёРјР°РµС‚ СЃС‚СЂРѕС‡РєСѓ, РІРѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕС‡РєСѓ, СЃРѕРґРµСЂР¶Р°С‰СѓСЋ hex-РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃРёРјРІРѕР»РѕРІ РёСЃС…РѕРґРЅРѕР№ СЃС‚СЂРѕС‡РєРё
+string Crypto::cvthex(string str)
+{
+	string out;
+	stringstream ss;
+	char* out_tmp;
+	out_tmp = (char *)malloc(3);
 
-//Принимает строку и переупорядочивает её элементы в обратном направлении. По одному символу,если ishex = 0 и по два, если ishex = 1
+	for (int i = 0; i <str.length(); i++)
+	{
+		sprintf((char *)out_tmp, "%02hx", (unsigned char)str[i]);
+		ss << (unsigned char *)out_tmp;
+	}
+	out.clear();
+	ss >> out;
+
+	return out;
+}
+
+
+//РџСЂРёРЅРёРјР°РµС‚ СЃС‚СЂРѕРєСѓ Рё РїРµСЂРµСѓРїРѕСЂСЏРґРѕС‡РёРІР°РµС‚ РµС‘ СЌР»РµРјРµРЅС‚С‹ РІ РѕР±СЂР°С‚РЅРѕРј РЅР°РїСЂР°РІР»РµРЅРёРё. РџРѕ РѕРґРЅРѕРјСѓ СЃРёРјРІРѕР»Сѓ,РµСЃР»Рё ishex = 0 Рё РїРѕ РґРІР°, РµСЃР»Рё ishex = 1
 string Crypto::reorder(string original, bool ishex)
 {
 	string temp;
@@ -68,7 +99,7 @@ string Crypto::reorder(string original, bool ishex)
 	}
 	return temp;
 }
-
+//Р РµР°Р»РёР·Р°С†РёСЏ VKO*************************************************************************************
 VKO::VKO(ECCurve curve, ECPoint Px, BigInteger x, BigInteger UKM)
 {   
 	this->curve = curve;
@@ -102,23 +133,205 @@ void VKO::KEK(Algorithms algorithm, ECCurve curve, BigInteger x, ECPoint Py, Big
 
 }
 
+//Р РµР°Р»РёР·Р°С†РёСЏ SoftSPAKE*************************************************************************************
 
-std::random_device rd;
-std::mt19937 eng(rd());
-std::uniform_int_distribution<> lim1(3, 6);
-std::uniform_int_distribution<> lim2(7, 20);
-std::uniform_int_distribution<> lim3(1000, 100000);
-
-void SoftSPAKE::initializeCTR()
+SoftSPAKE::SoftSPAKE(string pass, vector<ECSet> vect_ecset, unsigned ID, vector<unsigned> counters)
 {
-	this->ctr[1] = lim1(eng);
-	this->ctr[2] = lim2(eng);
-	this->ctr[3] = lim3(eng);
+	IDa = ID;
+	PW = pass;
+	v_ecset = vect_ecset;
+	ctr = counters;
 }
 
-void HardSPAKE::initializeCTR()
+void SoftSPAKE::startCTR()
+{	
+	if ((ctr.at(0) == 0) || (ctr.at(1) == 0) || (ctr.at(2) == 0))
+		throw "bad_counter";
+	ctr.at(0)--;
+	ctr.at(1)--;
+	ctr.at(2)--;
+}
+
+void SoftSPAKE::ComputeQapw()
 {
-	this->ctr[1] = lim1(eng);
-	this->ctr[2] = lim2(eng);
-	this->ctr[3] = lim3(eng);
+	string keymat;
+	BigInteger mult;
+	Compute_PBKDF2(algo341112_512, PW, salt.toString(), keymat);
+	keymat = cvthex(keymat);
+	mult = BigInteger(keymat, 16);
+	Qapw = v_ecset.at(IDalg).curve.multiplyPoint(mult, v_ecset.at(IDalg).points.at(ind));
+}
+
+void SoftSPAKE::Computeu1()
+{
+	О± = randomBigInteger(v_ecset.at(IDalg).curve.q());
+	za = false;
+	BigInteger mult(-1);
+	ECPoint negQapw = v_ecset.at(IDalg).curve.multiplyPoint(mult,Qapw);
+	ECPoint О±P = v_ecset.at(IDalg).curve.multiplyPoint(О±, v_ecset.at(IDalg).curve.getBasepoint());
+	u1 = v_ecset.at(IDalg).curve.addPoint(О±P, negQapw);
+}
+
+void SoftSPAKE::Checku2()
+{
+	if (!v_ecset.at(IDalg).curve.pointExists(u2))
+		throw "invalid_point";
+	
+}
+
+void SoftSPAKE::ComputeQa()
+{
+	BigInteger mult(-1);
+	ECPoint negQapw = v_ecset.at(IDalg).curve.multiplyPoint(mult, Qapw);
+	Qa = v_ecset.at(IDalg).curve.addPoint(u2,negQapw);
+}
+
+void SoftSPAKE::CheckQa()
+{
+	BigInteger h = v_ecset.at(IDalg).curve.n() / v_ecset.at(IDalg).curve.q();
+	if (v_ecset.at(IDalg).curve.multiplyPoint(h, Qa).isPointAtInfinity())
+	{
+		za = true;
+		Qa = v_ecset.at(IDalg).curve.getBasepoint();
+	}
+}
+
+void SoftSPAKE::ComputeKa()
+{
+	KEK(algo341112, v_ecset.at(IDalg).curve, О±, Qa, 1, Ka);
+}
+
+void SoftSPAKE::ComputeMACa()
+{
+	string key;
+	stringstream ss;
+	ss << "01" << IDa << ind << salt.toString() << u1.getX().toString() << u1.getY().toString() << u2.getX().toString() << u2.getY().toString();
+	ss >> key;
+	key = cvtstr(key);
+	Compute_HMAC(algo341112, Ka, key, key.length(), MACa);
+}
+
+void SoftSPAKE::CheckMACb()
+{
+	string key;
+	stringstream ss;
+	ss << "02" << IDb << ind << salt.toString() << u1.getX().toString() << u1.getY().toString() << u2.getX().toString() << u2.getY().toString();
+	ss >> key;
+	key = cvtstr(key);
+	string local_MACb;
+	Compute_HMAC(algo341112, Ka, key, key.length(), local_MACb);
+
+	if (MACb.compare(local_MACb))
+		throw "invalid_MAC";
+
+}
+
+void SoftSPAKE::Checkza()
+{
+	if (za)
+		throw "error_in_u_value";
+	ctr.at(0) = 5;
+	ctr.at(1)++;
+}
+
+
+//Р РµР°Р»РёР·Р°С†РёСЏ HardSPAKE*************************************************************************************
+
+HardSPAKE::HardSPAKE(ECSet selected_set, unsigned ident, string pass, unsigned ID, vector<unsigned> counters)
+{	
+	IDb = ID;
+	ecset = selected_set;
+	IDalg = selected_set.IDalg;
+	ind = ident;
+	ctr = counters;
+
+	BigInteger lim = 2;
+	lim = lim.pow(128);
+	salt = randomBigInteger(lim);
+
+	string keymat;
+	BigInteger mult;
+	Compute_PBKDF2(algo341112_512, pass, salt.toString(), keymat);
+	keymat = cvthex(keymat);
+	mult = BigInteger(keymat, 16);
+	Qpw = ecset.curve.multiplyPoint(mult, ecset.points.at(ind));
+
+}
+
+void HardSPAKE::startCTR()
+{	
+	if ((ctr.at(0) == 0) || (ctr.at(1) == 0) || (ctr.at(2) == 0))
+		throw "bad_counter";
+	ctr.at(0)--;
+	ctr.at(1)--;
+	ctr.at(2)--;
+}
+
+
+void HardSPAKE::Checku1()
+{
+	if (!ecset.curve.pointExists(u1))
+		throw "invalid_point";
+}
+
+void HardSPAKE::ComputeQb()
+{
+	Qb = ecset.curve.addPoint(u1, Qpw);
+
+	ОІ = randomBigInteger(ecset.curve.q());
+	zb = false;
+}
+
+void HardSPAKE::CheckQb()
+{	
+	BigInteger h = ecset.curve.n() / ecset.curve.q();
+	if (ecset.curve.multiplyPoint(h, Qb).isPointAtInfinity())
+	{
+		zb = true;
+		Qb = ecset.curve.getBasepoint();
+	}
+} 
+
+void HardSPAKE::ComputeKb()
+{
+	KEK(algo341112, ecset.curve, ОІ, Qb, 1, Kb);
+}
+
+void HardSPAKE::Computeu2()
+{
+	ECPoint ОІP = ecset.curve.multiplyPoint(ОІ, ecset.curve.getBasepoint());
+	u2 = ecset.curve.addPoint(ОІP,Qpw);
+}
+
+void HardSPAKE::CheckMACa()
+{
+	string key;
+	stringstream ss;
+	ss << "01" << IDa << ind << salt.toString() << u1.getX().toString() << u1.getY().toString() << u2.getX().toString() << u2.getY().toString();
+	ss >> key;
+	key = cvtstr(key);
+	string local_MACa;
+	Compute_HMAC(algo341112, Kb, key, key.length(), local_MACa);
+
+	if (MACa.compare(local_MACa))
+		throw "invalid_MAC";
+	
+}
+
+void HardSPAKE::ComputeMACb()
+{
+	string key;
+	stringstream ss;
+	ss << "02" << IDb << ind << salt.toString() << u1.getX().toString() << u1.getY().toString() << u2.getX().toString() << u2.getY().toString();
+	ss >> key;
+	key = cvtstr(key);
+	Compute_HMAC(algo341112, Kb, key, key.length(), MACb);
+}
+
+void HardSPAKE::Checkzb()
+{
+	if (zb)
+		throw "error_in_u_value";
+	ctr.at(0) = 5;
+	ctr.at(1)++;
 }

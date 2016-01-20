@@ -11,7 +11,6 @@
 
 using std::stringstream;
 using std::string;
-using std::bitset;
 using Crypto::Stribog;
 using Crypto::cvtstr;
 using Crypto::reorder;

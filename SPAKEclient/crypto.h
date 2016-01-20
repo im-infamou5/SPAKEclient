@@ -23,8 +23,10 @@ using std::vector;
 using std::string;
 
 typedef struct {
-	unsigned N;
-	map < unsigned, ECCurve, map<unsigned, ECPoint>> Map;
+	unsigned IDalg;	
+	string curve_label;
+	ECCurve curve;
+	vector<ECPoint> points;
 } ECSet;
 
 enum Algorithms {
@@ -38,6 +40,7 @@ namespace Crypto
 {
 	void cvtstr(string str, char * out, bool ishex = false);
 	string cvtstr(string str);
+	string cvthex(string str);
 	string reorder(string original, bool ishex = false);
 	void VKO_local();
 	void SPAKE_local();
@@ -88,7 +91,7 @@ namespace Crypto
 	class PBKDF2 : public HMAC {
 	public:
 		PBKDF2::PBKDF2(){};
-		void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, unsigned keylen, string &key, string &out, unsigned iteration_count = 2000);
+		void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, string &out, unsigned iteration_count = 2000);
 	};
 
 
@@ -125,34 +128,44 @@ namespace Crypto
 	private:
 		unsigned IDa, IDb, ind, IDalg;
 		string PW;
-		ECSet ecset;
+		vector<ECSet> v_ecset;
 		vector<unsigned> ctr;
 		BigInteger salt;
 		BigInteger α;
 		ECPoint Qapw;
 		bool za = false;
 		ECPoint u1, u2, Qa;
-		string Ka, MACa;
+		string Ka, MACa, MACb;
 		
 
 	public:
 		SoftSPAKE::SoftSPAKE(){};
-		SoftSPAKE::SoftSPAKE(const ECPoint &p);
-		SoftSPAKE::SoftSPAKE(const BigInteger &x, const BigInteger &y);
+		SoftSPAKE::SoftSPAKE(string pass, vector<ECSet> vect_ecset, unsigned ID = 0, vector<unsigned> counters = {5, 20, 100000});
 
-		void SoftSPAKE::initializeCTR();
 		void SoftSPAKE::ComputeQapw();
 		void SoftSPAKE::Computeu1();
+		void SoftSPAKE::Checku2();
 		void SoftSPAKE::ComputeQa();
 		void SoftSPAKE::CheckQa();
 		void SoftSPAKE::ComputeKa();
 		void SoftSPAKE::ComputeMACa();
 		void SoftSPAKE::CheckMACb();
+		void SoftSPAKE::Checkza();
 		void SoftSPAKE::startCTR();
 		void SoftSPAKE::endCTR();
 
-		BigInteger getX();
-		BigInteger getY();
+		unsigned SoftSPAKE::getIDa(){ return IDa; };
+		ECPoint SoftSPAKE::getu1() {return u1; };
+		string SoftSPAKE::getMACa(){ return MACa; };
+		BigInteger  SoftSPAKE::getα(){ return α; };
+		string SoftSPAKE::getKa(){ return Ka; };
+
+		void SoftSPAKE::setIDalg(unsigned IDalg){ this->IDalg = IDalg; };
+		void SoftSPAKE::setind(unsigned ind){ this->ind = ind; };
+		void SoftSPAKE::setsalt(BigInteger salt){ this->salt = salt; };
+		void SoftSPAKE::setIDb(unsigned IDb){ this->IDb = IDb; };
+		void SoftSPAKE::setu2(ECPoint u2){ this->u2 = u2; };
+		void SoftSPAKE::setMACb(string MACb){ this->MACb = MACb; };
 
 	};
 
@@ -171,20 +184,32 @@ namespace Crypto
 
 	public:
 		HardSPAKE::HardSPAKE(){};
-		HardSPAKE::HardSPAKE(const ECPoint &p);
-		HardSPAKE::HardSPAKE(const BigInteger &x, const BigInteger &y);
+		HardSPAKE::HardSPAKE(ECSet selected_set, unsigned ident,  string pass, unsigned ID = 0, vector<unsigned> counters = { 5, 20, 100000 });
 
-		void HardSPAKE::initializeCTR();
-		void HardSPAKE::ComputeQpw();
+		void HardSPAKE::Checku1();
 		void HardSPAKE::ComputeQb();
 		void HardSPAKE::CheckQb();
 		void HardSPAKE::ComputeKb();
 		void HardSPAKE::Computeu2();
 		void HardSPAKE::CheckMACa();
 		void HardSPAKE::ComputeMACb();
+		void HardSPAKE::Checkzb();
+		void HardSPAKE::startCTR();
+		void HardSPAKE::endCTR();
 
-		BigInteger getX();
-		BigInteger getY();
+		unsigned HardSPAKE::getIDb(){ return IDb; };
+		unsigned HardSPAKE::getIDalg(){ return IDalg; };
+		unsigned HardSPAKE::getind(){ return ind; };
+		BigInteger HardSPAKE::getsalt(){ return salt; };
+		ECPoint HardSPAKE::getu2(){ return u2; };
+		string HardSPAKE::getMACb(){ return MACb; };
+		ECPoint HardSPAKE::getQpw(){ return Qpw; };
+		BigInteger  HardSPAKE::getβ(){ return β; };
+		string HardSPAKE::getKb(){ return Kb; };
+
+		void HardSPAKE::setIDa(unsigned IDa){ this->IDa = IDa; };
+		void HardSPAKE::setu1(ECPoint u1){ this->u1 = u1; };
+		void HardSPAKE::setMACa(string MACa){ this->MACa = MACa; };
 
 	};
 
