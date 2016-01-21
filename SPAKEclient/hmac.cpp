@@ -18,8 +18,12 @@ void HMAC::Compute_HMAC(Algorithms algorithm, string text, string key, size_t le
 		key = cvtstr(key);
 		length = length / 2;
 	}
-
-	text = reorder(text);
+	
+	if (!(algorithm == 1))
+	{
+		text = reorder(text);
+		key = reorder(key);
+	}
 
 	switch (algorithm)
 	{
@@ -42,7 +46,7 @@ void HMAC::Compute_HMAC(Algorithms algorithm, string text, string key, size_t le
 		for (size_t i = length; i < block_size; i++)
 		key += '\0';
 	}
-	key = reorder(key);
+
 
 	ipad.assign(block_size, 0x36);
 	opad.assign(block_size, 0x5c);
@@ -57,7 +61,7 @@ void HMAC::Compute_HMAC(Algorithms algorithm, string text, string key, size_t le
 
 	switch (algorithm)
 	{
-		case 1: hash(reorder(step1), step1.length(), step2); break;
+		case 1: hash(step1, step1.length(), step2); break;
 		case 2: hash256(reorder(step1), step1.length(), step2); break;
 		case 3: hash512(reorder(step1), step1.length(), step2); break;
 
@@ -77,12 +81,19 @@ void HMAC::Compute_HMAC(Algorithms algorithm, string text, string key, size_t le
 		}
 	}*/
 	
-	step3 = opad + reorder(step2);
-	temp.empty();
+	if ((algorithm == 1))
+	{
+		step3 = opad + step2;
+	}
+	else
+	{
+		step3 = opad + reorder(step2);
+	}
+
 
 	switch (algorithm)
 	{
-		case 1: hash(reorder(step3), step3.length(), mac); break;
+		case 1: hash(step3, step3.length(), mac); break;
 		case 2: hash256(reorder(step3), step3.length(), mac); break;
 		case 3: hash512(reorder(step3), step3.length(), mac); break;
 	}
