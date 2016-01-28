@@ -40,10 +40,13 @@ namespace Crypto
 {
 	void cvtstr(string str, char * out, bool ishex = false);
 	string cvtstr(string str);
+	string cvtstr(unsigned num);
 	string cvthex(string str);
 	string reorder(string original, bool ishex = false);
-	void VKO_local();
-	void SPAKE_local();
+	int Testing_Monitor();
+	int VKO_local();
+	int SPAKE_local();
+	int SPAKE_HPI();
 
 	class GOST341194 {
 	public:
@@ -91,7 +94,7 @@ namespace Crypto
 	class PBKDF2 : public HMAC {
 	public:
 		PBKDF2::PBKDF2(){};
-		void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, string &out, unsigned iteration_count = 2000);
+		void PBKDF2::Compute_PBKDF2(string PW, string salt, string &out, unsigned iteration_count = 2000, unsigned res_length = 64);
 	};
 
 

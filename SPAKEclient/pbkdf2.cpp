@@ -1,43 +1,55 @@
 #include <sstream>
 #include <string>
-#include <sstream>
 #include "crypto.h"
 
 using namespace Crypto;
 using std::stringstream;
 
-void PBKDF2::Compute_PBKDF2(Algorithms algorithm, string PW, string salt, string &out, unsigned iteration_count)
+void PBKDF2::Compute_PBKDF2(string PW, string salt, string &out, unsigned iteration_count, unsigned res_length)
 {
 	string mac0, mac1, mac2;
 	stringstream stream;
+	unsigned steps_count = res_length / 64;
+	unsigned tail = res_length % 64;
+	string label;
+	if (tail)
+		steps_count++;
 
-	stream << salt << 1;
-	salt = stream.str();
-
-	for (int i = 0; i < iteration_count; i++)
+	for (unsigned i = 1; i <= steps_count; i++)
 	{
-		if (!i)
+		label = salt + cvtstr(i);
+		//stream << salt  << 1;
+		//salt = stream.str();
+		//stream.str(string());
+		Compute_HMAC(algo341112_512, label, PW, PW.length(), mac0);
+		mac2 = mac0;
+		for (int i = 1; i < iteration_count; i++)
 		{
-			Compute_HMAC((Algorithms)algorithm, PW, salt, salt.length(), mac0);
-			out = mac0;
-		}
-		if (i)
-		{
-			Compute_HMAC((Algorithms)algorithm, PW, mac0, mac0.length(), mac1);
-			for (size_t i = 0uL; i < mac0.length(); ++i)
+			/*if (!i)
 			{
-				mac0[i] ^= mac1[i];
-			}
-			mac2 = mac0;
-			mac0 = mac1;
-			mac1.assign("");
+				Compute_HMAC(algo341112_512, PW, salt, salt.length(), mac0);
+				out = mac0;
+			}*/
+			
+			Compute_HMAC(algo341112_512, mac0, PW, PW.length(), mac0);
+				for (int i = 0uL; i < mac2.length(); ++i)
+				{
+					mac2[i] ^= mac0[i];
+				}
+				//mac2 = mac0;
+				//mac0 = mac1;
+				//mac1.assign("");
 		}
-	}
-	stream.str(std::string());
 
-	stream << std::hex << mac2; 
+		stream << mac2;
+	}
+	//stream.str(string());
 
 	out = stream.str();
-
+	if (tail)
+	{	
+		tail = 64 - tail;
+		out.erase(out.length() - tail, tail);
+	}
 
 }

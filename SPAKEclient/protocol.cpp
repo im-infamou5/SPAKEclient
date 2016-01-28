@@ -53,6 +53,19 @@ string Crypto::cvtstr(string str)
 	}
 	return out;
 }
+//Ещё одна перегрузка, переводит число в строковое представление его значения
+string Crypto::cvtstr(unsigned num)
+{
+	string out(sizeof(num), ' ');
+	char buf;
+	for (int i = 0; i < sizeof(num); i++)
+	{
+		buf = num % 0x100;
+		num >>= 8;
+		out[sizeof(num) - i - 1] = buf;
+	}
+	return out;
+}
 //Принимает строчку, возвращает строчку, содержащую hex-представление символов исходной строчки
 string Crypto::cvthex(string str)
 {
@@ -156,7 +169,7 @@ void SoftSPAKE::ComputeQapw()
 {
 	string keymat;
 	BigInteger mult;
-	Compute_PBKDF2(algo341112_512, PW, salt.toString(), keymat);
+	Compute_PBKDF2( PW, salt.toString(), keymat);
 	keymat = cvthex(keymat);
 	mult = BigInteger(keymat, 16);
 	Qapw = v_ecset.at(IDalg).curve.multiplyPoint(mult, v_ecset.at(IDalg).points.at(ind));
@@ -251,7 +264,7 @@ HardSPAKE::HardSPAKE(ECSet selected_set, unsigned ident, string pass, unsigned I
 
 	string keymat;
 	BigInteger mult;
-	Compute_PBKDF2(algo341112_512, pass, salt.toString(), keymat);
+	Compute_PBKDF2( pass, salt.toString(), keymat);
 	keymat = cvthex(keymat);
 	mult = BigInteger(keymat, 16);
 	Qpw = ecset.curve.multiplyPoint(mult, ecset.points.at(ind));
